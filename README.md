@@ -24,3 +24,8 @@ open deliverables/_dashboard.html
 - `.claude/` — 에이전트 + 스킬(`/onboard` `/task` `/deliver` `/view`)
 
 자세한 작동 원리는 `PROGRAM.md`, 정체성·규칙은 `CLAUDE.md`.
+
+## 더 보기
+
+- [`docs/DESIGN.md`](docs/DESIGN.md) — Seed 전체 설계 (원탁 × Karpathy 혼합, 파이프라인, 명명 규약)
+- [`docs/poster.html`](docs/poster.html) — 프로젝트 한눈에 보기 포스터 (브라우저로 열기)

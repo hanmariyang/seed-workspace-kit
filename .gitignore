@@ -1,0 +1,6 @@
+# Seed — local state, not committed
+workspace.db
+workspace.db-journal
+__pycache__/
+*.pyc
+.DS_Store

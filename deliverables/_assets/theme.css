@@ -1,0 +1,49 @@
+/* Seed — 공용 테마 (산출물 + 대시보드 공유). 추후 다듬을 예정인 최소 버전. */
+:root{
+  --bg:#fbfcfb; --ink:#1d2520; --muted:#6b7a6e; --line:#e3e9e3;
+  --seed:#2fa85a; --seed-d:#1f7d42; --soft:#f1f6f1; --card:#ffffff;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);line-height:1.7;
+  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Segoe UI",sans-serif;}
+.wrap{max-width:860px;margin:0 auto;padding:48px 24px}
+.doc-head{border-bottom:2px solid var(--seed);padding-bottom:16px;margin-bottom:28px}
+.doc-head h1{margin:0;font-size:30px;letter-spacing:-.5px}
+.doc-head .sub{margin:6px 0 0;color:var(--muted);font-size:14px}
+.doc h1,.doc h2,.doc h3{letter-spacing:-.3px;margin:28px 0 12px}
+.doc h2{font-size:21px;border-bottom:1px solid var(--line);padding-bottom:6px}
+.doc h3{font-size:17px}
+.doc p{margin:12px 0}
+.doc a{color:var(--seed-d);text-decoration:none;border-bottom:1px solid #bfe0c9}
+.doc a:hover{background:var(--soft)}
+.doc code{background:var(--soft);color:var(--seed-d);padding:2px 6px;border-radius:5px;
+  font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:.88em}
+.doc pre{background:#0e140f;color:#cfe0cd;padding:18px;border-radius:10px;overflow:auto}
+.doc pre code{background:none;color:inherit;padding:0}
+.doc blockquote{margin:14px 0;padding:10px 18px;border-left:3px solid var(--seed);
+  background:var(--soft);color:#3a463c;border-radius:0 8px 8px 0}
+.doc table{border-collapse:collapse;width:100%;margin:16px 0;font-size:14px}
+.doc th,.doc td{border:1px solid var(--line);padding:9px 12px;text-align:left}
+.doc th{background:var(--soft);font-weight:700}
+.doc hr{border:none;border-top:1px solid var(--line);margin:24px 0}
+.doc-foot{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);
+  color:var(--muted);font-size:12px;text-align:center}
+
+/* dashboard */
+.stats{display:flex;gap:14px;margin:8px 0 24px}
+.stat{flex:1;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;text-align:center}
+.stat .num{font-size:32px;font-weight:800;color:var(--seed-d);line-height:1}
+.stat .lab{font-size:12px;color:var(--muted);margin-top:6px}
+table.grid{border-collapse:collapse;width:100%;margin:8px 0 28px;font-size:14px}
+table.grid th{background:var(--soft);text-align:left;padding:10px 12px;border-bottom:2px solid var(--line);font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+table.grid td{padding:11px 12px;border-bottom:1px solid var(--line)}
+table.grid tr:hover td{background:var(--soft)}
+.grid .id{font-family:"SF Mono",ui-monospace,monospace;color:var(--muted);font-size:13px}
+.grid .dim{color:var(--muted);font-size:13px}
+.grid a{color:var(--seed-d);text-decoration:none;font-weight:600}
+.grid a:hover{text-decoration:underline}
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px}
+.b-todo{background:#eef1ee;color:#5a6a5d}
+.b-doing{background:#fff3d6;color:#9a7400}
+.b-done{background:#dcf3e3;color:var(--seed-d)}
+.b-drop{background:#f2e3e3;color:#a05050}

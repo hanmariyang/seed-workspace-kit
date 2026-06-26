@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌱 Seed — 프로젝트 포스터</title>
+<style>
+  :root{
+    --bg:#0f1410; --panel:#161d17; --panel2:#1c241d;
+    --ink:#eaf2e8; --muted:#9db09a; --line:#2a352a;
+    --seed:#5fd97a; --seed-d:#39b85b; --leaf:#a6e8b0;
+    --karp:#7bb6ff; --won:#ffb86b; --gold:#ffd36b;
+    --r:18px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:
+      radial-gradient(1200px 600px at 15% -10%, rgba(95,217,122,.14), transparent 60%),
+      radial-gradient(1000px 500px at 95% 5%, rgba(123,182,255,.10), transparent 55%),
+      var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Segoe UI",sans-serif;
+    line-height:1.6; padding:48px 20px; -webkit-font-smoothing:antialiased;
+  }
+  .poster{max-width:1080px;margin:0 auto}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:34px;margin-bottom:24px}
+
+  /* HERO */
+  .hero{
+    position:relative;overflow:hidden;
+    background:linear-gradient(135deg,#13321d 0%,#0f1410 55%);
+    border:1px solid #284a30;padding:56px 40px;
+  }
+  .hero .seedmark{font-size:64px;line-height:1;filter:drop-shadow(0 6px 18px rgba(95,217,122,.45))}
+  .hero h1{font-size:88px;font-weight:850;letter-spacing:-3px;margin:10px 0 4px;
+    background:linear-gradient(180deg,#eafff0,var(--seed));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .hero .tag{font-size:23px;font-weight:600;color:var(--leaf)}
+  .hero .sub{font-size:15px;color:var(--muted);font-style:italic;margin-top:6px}
+  .hero .chips{margin-top:22px;display:flex;gap:10px;flex-wrap:wrap}
+  .chip{font-size:13px;font-weight:600;padding:7px 14px;border-radius:999px;border:1px solid var(--line);background:var(--panel2);color:var(--leaf)}
+  .chip.k{color:var(--karp);border-color:#2b3a52}
+  .chip.w{color:var(--won);border-color:#4a3a26}
+
+  /* section heads */
+  h2{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--seed);margin-bottom:18px;font-weight:700}
+  h2 .n{color:var(--line);margin-right:10px}
+
+  /* LINEAGE */
+  .lineage{display:grid;grid-template-columns:1fr 64px 1fr;gap:0;align-items:stretch}
+  .gene{border-radius:14px;padding:24px;border:1px solid var(--line)}
+  .gene.won{background:linear-gradient(160deg,rgba(255,184,107,.08),transparent);border-color:#4a3a26}
+  .gene.karp{background:linear-gradient(160deg,rgba(123,182,255,.08),transparent);border-color:#2b3a52}
+  .gene h3{font-size:17px;margin-bottom:4px}
+  .gene.won h3{color:var(--won)} .gene.karp h3{color:var(--karp)}
+  .gene .role{font-size:12px;color:var(--muted);margin-bottom:14px}
+  .gene ul{list-style:none;font-size:13.5px;color:var(--ink)}
+  .gene li{padding:4px 0 4px 18px;position:relative}
+  .gene li::before{content:"";position:absolute;left:0;top:12px;width:6px;height:6px;border-radius:50%}
+  .gene.won li::before{background:var(--won)} .gene.karp li::before{background:var(--karp)}
+  .cross{display:flex;align-items:center;justify-content:center;font-size:30px;color:var(--seed);font-weight:800}
+  .verdict{margin-top:18px;text-align:center;font-size:15px;color:var(--leaf);
+    background:var(--panel2);border:1px dashed #2a4a30;border-radius:12px;padding:16px}
+  .verdict b{color:var(--seed)}
+
+  /* SPLIT */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .half{border-radius:14px;padding:22px;border:1px solid var(--line);background:var(--panel2)}
+  .half .lab{font-size:12px;letter-spacing:1px;color:var(--muted);text-transform:uppercase}
+  .half .big{font-size:21px;font-weight:800;margin:6px 0 10px}
+  .half.state .big{color:var(--gold)} .half.know .big{color:var(--seed)}
+  .half code{font-size:12.5px;color:var(--leaf);background:#0e140f;padding:2px 7px;border-radius:6px;border:1px solid var(--line)}
+  .half p{font-size:13px;color:var(--muted);margin-top:10px}
+
+  /* TREE */
+  pre.tree{background:#0c110d;border:1px solid var(--line);border-radius:14px;padding:22px;overflow:auto;
+    font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:12.5px;line-height:1.85;color:#cfe0cd}
+  pre.tree .d{color:var(--seed);font-weight:700}
+  pre.tree .c{color:#6f836d}
+  pre.tree .w{color:var(--won)} pre.tree .k{color:var(--karp)}
+
+  /* PIPELINES */
+  .pipe{margin-bottom:18px}
+  .pipe .ttl{font-size:15px;font-weight:700;margin-bottom:12px}
+  .pipe .ttl span{font-size:12px;font-weight:600;color:var(--muted);margin-left:8px}
+  .flow{display:flex;gap:8px;flex-wrap:wrap;align-items:stretch}
+  .step{flex:1;min-width:118px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:13px 14px;position:relative}
+  .step .si{font-size:11px;color:var(--seed);font-weight:700;letter-spacing:.5px}
+  .step .st{font-size:13.5px;font-weight:600;margin-top:3px}
+  .step .sd{font-size:11px;color:var(--muted);margin-top:3px}
+  .arrow{align-self:center;color:var(--line);font-size:18px}
+  .pipe.b .si{color:var(--karp)}
+
+  /* NAMING */
+  table.nm{width:100%;border-collapse:collapse;font-size:13px}
+  table.nm th{text-align:left;color:var(--muted);font-weight:600;font-size:11px;letter-spacing:1px;text-transform:uppercase;padding:0 12px 10px}
+  table.nm td{padding:11px 12px;border-top:1px solid var(--line)}
+  table.nm code{color:var(--leaf);font-family:"SF Mono",ui-monospace,monospace;font-size:12.5px}
+  table.nm .ex{color:var(--seed)}
+
+  /* PRINCIPLES */
+  .prin{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .p{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .p .num{font-size:26px;font-weight:850;color:var(--seed);opacity:.5;line-height:1}
+  .p .h{font-size:14px;font-weight:700;margin:8px 0 5px}
+  .p .x{font-size:12px;color:var(--muted)}
+
+  /* ROADMAP */
+  .road{display:flex;gap:10px;flex-wrap:wrap}
+  .ph{flex:1;min-width:140px;border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--panel2)}
+  .ph.done{border-color:#2a4a30;background:linear-gradient(160deg,rgba(95,217,122,.10),transparent)}
+  .ph .pn{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--muted)}
+  .ph.done .pn{color:var(--seed)}
+  .ph .pt{font-size:13px;font-weight:600;margin-top:5px}
+  .ph .ps{font-size:18px;margin-top:8px}
+
+  footer{text-align:center;color:var(--muted);font-size:12.5px;padding:14px 0 4px}
+  footer b{color:var(--seed)}
+  .meta{text-align:center;color:#56655a;font-size:11px;margin-top:4px}
+  @media(max-width:760px){
+    .hero h1{font-size:60px} .lineage{grid-template-columns:1fr}
+    .cross{height:44px} .split,.prin{grid-template-columns:1fr}
+    .prin{grid-template-columns:1fr 1fr}
+  }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <!-- HERO -->
+  <div class="hero card">
+    <div class="seedmark">🌱</div>
+    <h1>Seed</h1>
+    <div class="tag">인터뷰 한 번으로, 당신의 업무에 맞는 워크스페이스가 자란다</div>
+    <div class="sub">Plant once. Grow your own Claude Code workspace.</div>
+    <div class="chips">
+      <span class="chip">처음 쓰는 사람용</span>
+      <span class="chip">의존성 0 · SQLite 1파일</span>
+      <span class="chip">md + html 산출물</span>
+      <span class="chip w">원탁 골격</span>
+      <span class="chip k">Karpathy 미니멀</span>
+      <span class="chip">템플릿 repo</span>
+    </div>
+  </div>
+
+  <!-- WHAT -->
+  <div class="card">
+    <h2><span class="n">01</span>복사가 아니라 인터뷰</h2>
+    <p style="font-size:15px;color:var(--ink)">
+      남의 워크스페이스를 통째로 복사하면 내 업무와 안 맞아 방치된다.
+      Seed 는 빈 폴더를 주는 대신 <b style="color:var(--seed)">당신을 6~8개 인터뷰</b>하고,
+      그 답으로 디렉토리·로컬 DB·전용 조력 에이전트·코어 스킬·산출물 뷰어를 <b style="color:var(--seed)">맞춤 생성</b>한다.
+      마지막엔 첫 산출물 하나를 즉석에서 만들어 브라우저에 띄워 보여주고 물러난다.
+    </p>
+  </div>
+
+  <!-- LINEAGE -->
+  <div class="card">
+    <h2><span class="n">02</span>두 계보의 혼합</h2>
+    <div class="lineage">
+      <div class="gene won">
+        <h3>원탁 Round Table</h3>
+        <div class="role">운영 골격</div>
+        <ul>
+          <li>CLAUDE.md 정체성</li>
+          <li>.claude/ agents · skills</li>
+          <li>산출물 md + html 이중 저장</li>
+          <li>업무 파이프라인</li>
+        </ul>
+      </div>
+      <div class="cross">×</div>
+      <div class="gene karp">
+        <h3>Andrej Karpathy</h3>
+        <div class="role">LLM Wiki · 미니멀리즘</div>
+        <ul>
+          <li>wiki/ 플랫 마크다운 (RAG 없음)</li>
+          <li>단일 파일 도구</li>
+          <li>의존성 0</li>
+          <li>PROGRAM.md 아이디어 파일</li>
+        </ul>
+      </div>
+    </div>
+    <div class="verdict">
+      그 결과 하나의 원칙 → <b>상태(state)는 DB, 지식(knowledge)은 플랫 마크다운.</b>
+    </div>
+  </div>
+
+  <!-- SPLIT -->
+  <div class="card">
+    <h2><span class="n">03</span>상태 ≠ 지식</h2>
+    <div class="split">
+      <div class="half state">
+        <div class="lab">변하는 구조화 데이터</div>
+        <div class="big">상태 → <code>workspace.db</code></div>
+        <div>업무 · 산출물 메타 · 결정 로그</div>
+        <p>SQLite 단일 파일. 쿼리·집계·대시보드용. Docker 없음.</p>
+      </div>
+      <div class="half know">
+        <div class="lab">쌓이는 텍스트 지식</div>
+        <div class="big">지식 → <code>wiki/*.md</code></div>
+        <div>정책 · 배운 것 · 결정의 이유</div>
+        <p>평문은 실패 모드가 없고, 띄울 서비스가 없고, git 으로 버전되고, 어떤 LLM이든 읽는다.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TREE -->
+  <div class="card">
+    <h2><span class="n">04</span>생성되는 구조</h2>
+<pre class="tree">my-workspace/
+├── <span class="d">CLAUDE.md</span>              <span class="c"># 정체성·규칙·조력자 (인터뷰로 생성)</span>
+├── <span class="k">PROGRAM.md</span>             <span class="c"># 아이디어 파일 — 작동 원리 + 개선 로그</span>
+├── <span class="d">.claude/</span>
+│   ├── agents/            <span class="c"># 인터뷰가 낳은 조력자 1~2명</span>
+│   └── skills/            <span class="c"># /task · /deliver · /view</span>
+├── <span class="d">workspace.db</span>           <span class="c"># [상태] SQLite — tasks · deliverables</span>
+├── <span class="k">wiki/</span>                  <span class="c"># [지식] 플랫 마크다운 (RAG 없음)</span>
+│   ├── index.md
+│   └── *.md               <span class="c"># 한 파일 = 한 주제</span>
+├── bin/
+│   ├── ws.py              <span class="c"># DB 헬퍼 CLI (단일 파일, 의존성 0)</span>
+│   └── render.py          <span class="c"># md→html + 대시보드 빌더</span>
+├── <span class="w">deliverables/</span>          <span class="c"># slug.md + slug.html 쌍</span>
+│   └── _dashboard.html    <span class="c"># 자동 생성 — 더블클릭으로 열림</span>
+├── notes/inbox/           <span class="c"># 메모 → 정제되면 wiki/ 로 승격</span>
+└── archive/</pre>
+  </div>
+
+  <!-- PIPELINES -->
+  <div class="card">
+    <h2><span class="n">05</span>두 개의 파이프라인</h2>
+    <div class="pipe a">
+      <div class="ttl">/onboard — 워크스페이스 건축 <span>1회성 · workspace-architect 가 운전</span></div>
+      <div class="flow">
+        <div class="step"><div class="si">1</div><div class="st">인터뷰</div><div class="sd">6~8문항 적응형</div></div>
+        <div class="arrow">→</div>
+        <div class="step"><div class="si">2</div><div class="st">설계</div><div class="sd">답 → 변수 셋</div></div>
+        <div class="arrow">→</div>
+        <div class="step"><div class="si">3</div><div class="st">생성</div><div class="sd">골격 + DB + 에이전트</div></div>
+        <div class="arrow">→</div>
+        <div class="step"><div class="si">4</div><div class="st">시연</div><div class="sd">첫 산출물 md+html</div></div>
+        <div class="arrow">→</div>
+        <div class="step"><div class="si">5</div><div class="st">점화</div><div class="sd">대시보드 띄우고 퇴장</div></div>
+      </div>
+    </div>
+    <div class="pipe b">
+      <div class="ttl">/deliver — 일상 운영 <span>반복 · 조력 에이전트가 운전</span></div>
+      <div class="flow">
+        <div class="step"><div class="si">Capture</div><div class="st">업무 등록</div><div class="sd">tasks 行</div></div>
+        <div class="arrow">→</div>
+        <div class="step"><div class="si">Route</div><div class="st">유형 분류</div><div class="sd">스킬·템플릿 선택</div></div>
+        <div class="arrow">→</div>
+        <div class="step"><div class="si">Execute</div><div class="st">작업 수행</div><div class="sd">조력자</div></div>
+        <div class="arrow">→</div>
+        <div class="step"><div class="si">Persist</div><div class="st">이중 저장</div><div class="sd">md+html+DB+wiki</div></div>
+        <div class="arrow">→</div>
+        <div class="step"><div class="si">Report</div><div class="st">대시보드 재빌드</div><div class="sd">링크 반환</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAMING -->
+  <div class="card">
+    <h2><span class="n">06</span>명명 규약 — 기본값, 인터뷰에서 확정</h2>
+    <table class="nm">
+      <tr><th>대상</th><th>패턴</th><th>예시</th></tr>
+      <tr><td>산출물 폴더</td><td><code>{PREFIX}-{id:03d}-{slug}</code></td><td class="ex">WS-007-3분기-보고서</td></tr>
+      <tr><td>산출물 파일</td><td><code>{slug}.md · {slug}.html</code></td><td class="ex">3분기-보고서.md</td></tr>
+      <tr><td>wiki 지식</td><td><code>{topic-slug}.md</code></td><td class="ex">정산-정책.md</td></tr>
+      <tr><td>빠른 메모</td><td><code>{YYYY-MM-DD}-{slug}.md</code></td><td class="ex">2026-06-26-아이디어.md</td></tr>
+    </table>
+    <p style="font-size:12.5px;color:var(--muted);margin-top:14px">
+      PREFIX 는 워크스페이스 이름에서 자동 도출 · slug 한글 유지 기본 · 건축가가 <b style="color:var(--leaf)">단일 질문으로 확정</b> 후 <code style="color:var(--leaf)">bin/ws.py</code> 가 강제
+    </p>
+  </div>
+
+  <!-- PRINCIPLES -->
+  <div class="card">
+    <h2><span class="n">07</span>4대 원칙</h2>
+    <div class="prin">
+      <div class="p"><div class="num">01</div><div class="h">의존성 0 진입</div><div class="x">표준 라이브러리만. pip install 없이 시작</div></div>
+      <div class="p"><div class="num">02</div><div class="h">소스 + 렌더 동시</div><div class="x">모든 산출물 .md + .html 쌍</div></div>
+      <div class="p"><div class="num">03</div><div class="h">최소 골격</div><div class="x">조력자 1~2명, 스킬 3개. 자라난다</div></div>
+      <div class="p"><div class="num">04</div><div class="h">승격 경로만</div><div class="x">SQLite→PG, 정적→서버. 안내만, 강제 X</div></div>
+    </div>
+  </div>
+
+  <!-- ROADMAP -->
+  <div class="card">
+    <h2><span class="n">08</span>로드맵</h2>
+    <div class="road">
+      <div class="ph done"><div class="pn">P0</div><div class="pt">설계 + 건축 에이전트</div><div class="ps">✅</div></div>
+      <div class="ph"><div class="pn">P1</div><div class="pt">골격 + DB</div><div class="ps">⬜</div></div>
+      <div class="ph"><div class="pn">P2</div><div class="pt">뷰어</div><div class="ps">⬜</div></div>
+      <div class="ph"><div class="pn">P3</div><div class="pt">스킬 3종</div><div class="ps">⬜</div></div>
+      <div class="ph"><div class="pn">P4</div><div class="pt">온보딩</div><div class="ps">⬜</div></div>
+      <div class="ph"><div class="pn">P5</div><div class="pt">패키징</div><div class="ps">⬜</div></div>
+    </div>
+  </div>
+
+  <footer>
+    🌱 <b>Seed</b> — 인터뷰로 심고, 워크스페이스로 키운다.
+    <div class="meta">코드명 Seed · 배포 템플릿 repo · 2026-06-26 · projects/workspace-kit</div>
+  </footer>
+
+</div>
+</body>
+</html>

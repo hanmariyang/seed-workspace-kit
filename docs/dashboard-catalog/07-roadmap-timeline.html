@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seed · 07 Roadmap Timeline</title>
+<style>
+/* _shared/theme.css 인라인 (자기완결 — 더블클릭/Safari 안전) */
+/* ============================================================
+   Seed · Dashboard Catalog — 공유 테마 (컴포넌트 키트)
+   라이트 + 세련(기본) / [data-theme="dark"] 다크 모드
+   의존성 0 · 순수 CSS. 빌드 시 각 컨셉 파일에 인라인됨(자기완결).
+   ============================================================ */
+:root{
+  --bg:#f7f9f7; --ink:#19211c; --muted:#69786d; --faint:#94a397;
+  --line:#e6ece6; --line-2:#eef2ee; --card:#ffffff;
+  --seed:#27a456; --seed-d:#1c8345; --seed-l:#e7f6ec; --soft:#f1f6f2;
+  --blue:#3f8ce0; --amber:#d9a400; --rose:#c2410c; --violet:#7c5cd6; --teal:#0e9e8e;
+  --shadow:0 1px 2px rgba(20,40,25,.04), 0 8px 24px rgba(20,40,25,.05);
+  --shadow-lg:0 6px 16px rgba(20,40,25,.08), 0 22px 48px rgba(20,40,25,.10);
+  --r:14px; --r-s:10px; --r-xs:7px;
+  /* 도메인 컬러 */
+  --d-report:#3f8ce0; --d-research:#7c5cd6; --d-ops:#27a456;
+  --d-plan:#d9a400; --d-content:#c2410c; --d-dev:#0e9e8e;
+}
+[data-theme="dark"]{
+  --bg:#0e140f; --ink:#e8efe9; --muted:#9aab9e; --faint:#67786c;
+  --line:#243029; --line-2:#1b241e; --card:#151d17;
+  --seed:#3ecb72; --seed-d:#7fe0a0; --seed-l:#16291d; --soft:#172019;
+  --blue:#5ea6f0; --amber:#e6bb3a; --rose:#f0743f; --violet:#a48cec; --teal:#3fc7b6;
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 28px rgba(0,0,0,.35);
+  --shadow-lg:0 6px 16px rgba(0,0,0,.4), 0 22px 52px rgba(0,0,0,.5);
+  --d-report:#5ea6f0; --d-research:#a48cec; --d-ops:#3ecb72;
+  --d-plan:#e6bb3a; --d-content:#f0743f; --d-dev:#3fc7b6;
+}
+*{box-sizing:border-box}
+html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{margin:0;background:var(--bg);color:var(--ink);line-height:1.7;
+  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Segoe UI",sans-serif;
+  transition:background .2s,color .2s;}
+a{color:inherit}
+
+/* ---------- 레이아웃 셸 ---------- */
+.wrap{max-width:1140px;margin:0 auto;padding:36px 24px 72px}
+.wrap.wide{max-width:1280px}
+.back{display:inline-block;color:var(--muted);font-size:13px;text-decoration:none;margin-bottom:12px}
+.back:hover{color:var(--seed-d)}
+.head{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:8px}
+.head .brand{font-size:14px;font-weight:700;color:var(--seed-d);background:var(--seed-l);padding:5px 12px;border-radius:999px}
+.head h1{margin:0;font-size:25px;letter-spacing:-.6px}
+.head .stamp{margin-left:auto;color:var(--faint);font-size:12.5px}
+.subtitle{color:var(--muted);font-size:14px;margin:0 0 24px}
+.foot{margin-top:40px;color:var(--faint);font-size:12px;text-align:center}
+
+/* ---------- 통계 카드 ---------- */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.stat::after{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--seed);opacity:.85}
+.stat.s-blue::after{background:var(--blue)} .stat.s-amber::after{background:var(--amber)}
+.stat.s-rose::after{background:var(--rose)} .stat.s-done::after{background:var(--seed-d)}
+.stat .num{font-size:30px;font-weight:800;line-height:1;letter-spacing:-1px}
+.stat .lab{font-size:12.5px;color:var(--muted);margin-top:6px;font-weight:600}
+.stat .delta{font-size:11.5px;font-weight:700;margin-left:8px}
+.delta.up{color:var(--seed-d)} .delta.down{color:var(--rose)}
+
+/* ---------- 툴바 (필터·검색) ---------- */
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.search{flex:1;min-width:200px;border:1px solid var(--line);background:var(--card);color:var(--ink);
+  border-radius:var(--r-s);padding:10px 14px 10px 38px;font-size:14px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%2369786d' stroke-width='2' viewBox='0 0 24 24'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m21 21-4.3-4.3'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:13px center;transition:border-color .15s,box-shadow .15s}
+.search:focus{outline:none;border-color:var(--seed);box-shadow:0 0 0 3px var(--seed-l)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--card);color:var(--muted);font-size:13px;font-weight:600;padding:8px 13px;border-radius:999px;cursor:pointer;transition:all .12s;user-select:none}
+.chip:hover{border-color:var(--seed);color:var(--seed-d)}
+.chip.on{background:var(--seed);border-color:var(--seed);color:#fff}
+[data-theme="dark"] .chip.on{color:#0e140f}
+
+/* 세그먼트 컨트롤 (뷰 전환 탭) */
+.seg{display:inline-flex;background:var(--soft);border:1px solid var(--line);border-radius:var(--r-s);padding:3px;gap:2px}
+.seg button{border:0;background:transparent;color:var(--muted);font-size:13px;font-weight:600;padding:7px 14px;border-radius:7px;cursor:pointer;transition:all .12s;display:inline-flex;align-items:center;gap:6px}
+.seg button:hover{color:var(--ink)}
+.seg button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.06)}
+
+/* kbd / 단축키 */
+kbd,.kbd{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:11px;background:var(--soft);border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:2px 6px;color:var(--muted)}
+
+/* ---------- 섹션 헤더 ---------- */
+h2.sec{font-size:15px;margin:24px 0 12px;display:flex;align-items:center;gap:8px;letter-spacing:-.2px}
+h2.sec .count{font-size:12px;font-weight:700;color:var(--muted);background:var(--soft);padding:2px 9px;border-radius:999px}
+
+/* ---------- 표 ---------- */
+.grid{border-collapse:separate;border-spacing:0;width:100%;font-size:14px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
+.grid thead th{background:var(--soft);text-align:left;padding:11px 14px;font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;border-bottom:1px solid var(--line);white-space:nowrap}
+.grid thead th.s{cursor:pointer;user-select:none}
+.grid thead th.s:hover{color:var(--seed-d)}
+.grid thead th.s::after{content:"⇅";opacity:.32;margin-left:5px;font-size:10px}
+.grid thead th.asc::after{content:"↑";opacity:1;color:var(--seed-d)}
+.grid thead th.desc::after{content:"↓";opacity:1;color:var(--seed-d)}
+.grid td{padding:11px 14px;border-bottom:1px solid var(--line-2)}
+.grid tbody tr:last-child td{border-bottom:none}
+.grid tbody tr:hover td{background:var(--soft)}
+.grid .id{font-family:"SF Mono",ui-monospace,Menlo,monospace;color:var(--faint);font-size:13px}
+.grid .ttl{font-weight:600}
+.grid .dim{color:var(--muted);font-size:13px}
+.grid a{color:var(--seed-d);text-decoration:none;font-weight:600}
+.grid a:hover{text-decoration:underline}
+.grid tr.empty td{text-align:center;color:var(--faint);padding:26px}
+
+/* ---------- 카드 ---------- */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:15px 17px}
+.card .id{font-family:"SF Mono",ui-monospace,Menlo,monospace;color:var(--faint);font-size:12px}
+.card .ttl{font-weight:700;font-size:15px;margin:4px 0 8px;letter-spacing:-.2px}
+.card .meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;color:var(--muted);font-size:12.5px}
+.card.lift{transition:transform .14s,box-shadow .14s,border-color .14s;cursor:pointer}
+.card.lift:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);border-color:var(--seed)}
+
+/* ---------- 상태 배지 ---------- */
+.badge{display:inline-block;font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:999px;white-space:nowrap}
+.b-todo{background:var(--soft);color:var(--muted)}
+.b-doing{background:#fff3d6;color:#9a7400}
+.b-done{background:var(--seed-l);color:var(--seed-d)}
+.b-dropped{background:#f2e4e4;color:#a05656}
+[data-theme="dark"] .b-doing{background:#2c2510;color:var(--amber)}
+[data-theme="dark"] .b-dropped{background:#2c1818;color:var(--rose)}
+.b-review{background:#e6eefb;color:#2b5fa6} .b-approved{background:var(--seed-l);color:var(--seed-d)} .b-changes{background:#fbe8df;color:var(--rose)}
+[data-theme="dark"] .b-review{background:#16223a;color:var(--blue)}
+
+/* 상태 점 (앞에 붙이는 작은 동그라미) */
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;vertical-align:middle;margin-right:6px}
+.dot.todo{background:var(--faint)} .dot.doing{background:var(--amber)} .dot.done{background:var(--seed)}
+
+/* ---------- 우선순위 ---------- */
+.prio{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted);font-weight:600}
+.prio::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--faint)}
+.p-hi{color:var(--rose)}.p-hi::before{background:var(--rose)}
+.p-mid{color:var(--muted)}.p-mid::before{background:var(--faint)}
+.p-lo{color:var(--blue)}.p-lo::before{background:var(--blue)}
+/* 우선순위 아이콘 막대(키보드-퍼스트 트래커 스타일) */
+.pbars{display:inline-flex;align-items:flex-end;gap:2px;height:11px}
+.pbars i{width:3px;background:var(--faint);border-radius:1px}
+.pbars i:nth-child(1){height:4px}.pbars i:nth-child(2){height:7px}.pbars i:nth-child(3){height:11px}
+.pbars.hi i{background:var(--rose)} .pbars.mid i:nth-child(-n+2){background:var(--muted)} .pbars.lo i:nth-child(1){background:var(--blue)}
+
+/* ---------- 도메인 태그 / 태그 ---------- */
+.dtag{font-size:11.5px;font-weight:700;padding:2px 9px;border-radius:6px;background:var(--soft);color:var(--muted);white-space:nowrap}
+.dtag::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:middle;background:currentColor;opacity:.9}
+.dtag.report{color:var(--d-report)} .dtag.research{color:var(--d-research)} .dtag.ops{color:var(--d-ops)}
+.dtag.plan{color:var(--d-plan)} .dtag.content{color:var(--d-content)} .dtag.dev{color:var(--d-dev)}
+.tag{font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--soft);color:var(--muted);border:1px solid var(--line)}
+
+/* ---------- 진행률 바 ---------- */
+.prog{height:6px;background:var(--soft);border-radius:999px;overflow:hidden;min-width:54px}
+.prog>i{display:block;height:100%;background:var(--seed);border-radius:999px}
+.ring{--p:0;width:34px;height:34px;border-radius:50%;background:conic-gradient(var(--seed) calc(var(--p)*1%),var(--soft) 0);display:grid;place-items:center;font-size:10px;font-weight:700;color:var(--muted)}
+.ring::after{content:"";position:absolute;width:24px;height:24px;border-radius:50%;background:var(--card)}
+.ring span{position:relative}
+
+/* ---------- 아바타 ---------- */
+.av{width:24px;height:24px;border-radius:50%;display:inline-grid;place-items:center;font-size:11px;font-weight:700;color:#fff;background:var(--seed)}
+.av.b{background:var(--blue)} .av.v{background:var(--violet)} .av.a{background:var(--amber)} .av.r{background:var(--rose)} .av.t{background:var(--teal)}
+
+/* ---------- 마감 배지 ---------- */
+.due{font-size:12px;font-weight:600;color:var(--muted);display:inline-flex;align-items:center;gap:4px}
+.due.soon{color:var(--rose)} .due.ok{color:var(--muted)}
+
+/* ============================================================
+   차트 프리미티브 (Insight Deck 등) — 순수 CSS / inline SVG
+   ============================================================ */
+.charts{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:18px 20px}
+.panel h3{margin:0 0 14px;font-size:13px;color:var(--muted);font-weight:700;letter-spacing:.2px}
+.donut{width:120px;height:120px;border-radius:50%;margin:0 auto;display:grid;place-items:center;position:relative}
+.donut::before{content:"";position:absolute;inset:18px;border-radius:50%;background:var(--card)}
+.donut .v{position:relative;font-size:24px;font-weight:800;letter-spacing:-1px}
+.bars{display:flex;flex-direction:column;gap:10px}
+.bar{display:grid;grid-template-columns:64px 1fr 28px;align-items:center;gap:8px;font-size:12.5px;color:var(--muted)}
+.bar .track{height:9px;background:var(--soft);border-radius:999px;overflow:hidden}
+.bar .fill{height:100%;background:var(--seed);border-radius:999px}
+.bar .n{text-align:right;font-weight:700;color:var(--ink)}
+.spark{width:100%;height:48px;display:block}
+.spark path{fill:none;stroke:var(--seed);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.spark .area{fill:var(--seed-l);stroke:none}
+
+/* 히트맵 (기여 그래프) */
+.heat{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,1fr);gap:3px}
+.heat i{width:13px;height:13px;border-radius:3px;background:var(--soft)}
+.heat i.l1{background:#cdeed8} .heat i.l2{background:#7fd49b} .heat i.l3{background:var(--seed)} .heat i.l4{background:var(--seed-d)}
+[data-theme="dark"] .heat i.l1{background:#1d3b27} [data-theme="dark"] .heat i.l2{background:#266b40} [data-theme="dark"] .heat i.l3{background:#2f9e57}
+
+/* 타임라인 / 로드맵 바 */
+.tl{position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:14px 0;overflow-x:auto}
+.tl .row{display:grid;grid-template-columns:200px 1fr;align-items:center;min-height:40px;border-bottom:1px solid var(--line-2)}
+.tl .row:last-child{border-bottom:none}
+.tl .lbl{padding:0 14px;font-size:13px;font-weight:600}
+.tl .track{position:relative;height:24px;margin-right:14px}
+.tl .barx{position:absolute;height:22px;border-radius:6px;background:var(--seed);opacity:.9;display:flex;align-items:center;padding:0 8px;color:#fff;font-size:11px;font-weight:700;white-space:nowrap;overflow:hidden}
+[data-theme="dark"] .tl .barx{color:#0e140f}
+.tl .barx.b{background:var(--blue)} .tl .barx.v{background:var(--violet)} .tl .barx.a{background:var(--amber)} .tl .barx.r{background:var(--rose)} .tl .barx.t{background:var(--teal)}
+.tl .grid-lines{position:absolute;inset:0;display:grid;pointer-events:none}
+.tl .grid-lines span{border-left:1px solid var(--line-2)}
+
+/* 캘린더 그리드 */
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.cal .d{background:var(--card);border:1px solid var(--line);border-radius:var(--r-xs);min-height:74px;padding:6px 8px;font-size:12px}
+.cal .d .dn{color:var(--faint);font-weight:700;font-size:11px}
+.cal .d.dim{opacity:.45} .cal .d.today{border-color:var(--seed);box-shadow:0 0 0 2px var(--seed-l)}
+.cal .ev{font-size:10.5px;font-weight:700;padding:2px 5px;border-radius:4px;margin-top:3px;background:var(--seed-l);color:var(--seed-d);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* 활동 피드 */
+.feed{list-style:none;margin:0;padding:0}
+.feed li{display:flex;gap:10px;padding:11px 2px;border-bottom:1px solid var(--line-2);font-size:13.5px}
+.feed li:last-child{border-bottom:none}
+.feed .ic{flex:0 0 26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--soft);font-size:13px}
+.feed .t{color:var(--faint);font-size:12px;margin-left:auto;white-space:nowrap}
+
+/* 명령 팔레트 (⌘K) */
+.palette{position:fixed;inset:0;background:rgba(20,30,22,.34);display:none;align-items:flex-start;justify-content:center;padding-top:14vh;z-index:50}
+.palette.open{display:flex}
+.palette .box{width:min(560px,92vw);background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow-lg);overflow:hidden}
+.palette input{width:100%;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--ink);font-size:15px;padding:15px 18px;outline:none}
+.palette .opt{display:flex;align-items:center;gap:10px;padding:11px 18px;font-size:14px;cursor:pointer}
+.palette .opt:hover,.palette .opt.sel{background:var(--soft)}
+.palette .opt .k{margin-left:auto}
+
+/* ---------- 테마 토글 ---------- */
+.ttog{border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:999px;width:34px;height:34px;cursor:pointer;font-size:15px;display:grid;place-items:center;transition:all .12s;flex:0 0 auto}
+.ttog:hover{border-color:var(--seed);color:var(--seed-d)}
+
+@media(max-width:820px){
+  .stats{grid-template-columns:1fr 1fr}
+  .charts{grid-template-columns:1fr}
+  .head .stamp{margin-left:0;width:100%}
+  .tl .row{grid-template-columns:130px 1fr}
+}
+
+</style>
+<style>
+/* ── 로드맵 전용 보강 (theme.css .tl/.row/.lbl/.track/.barx 재사용) ── */
+.rmbox{position:relative;margin-top:6px}
+
+/* 날짜 축 헤더 — track 영역(좌 200px, 우 14px)과 정렬 */
+.rm-axis{display:grid;grid-template-columns:200px 1fr;align-items:end;margin:0 0 4px}
+.rm-axis .sp{font-size:11.5px;color:var(--faint);font-weight:700;padding:0 14px;white-space:nowrap}
+.rm-axis .scale{position:relative;height:54px;margin-right:14px}
+.rm-axis .scale .tick{position:absolute;bottom:0;transform:translateX(-50%);font-size:11px;font-weight:700;color:var(--muted);white-space:nowrap}
+.rm-axis .scale .tick.now{color:var(--rose)}
+.rm-axis .scale .ms{position:absolute;top:0;width:0}
+.rm-axis .scale .ms .dia{position:absolute;top:0;left:0;width:10px;height:10px;border-radius:2px;
+  background:var(--seed-d);transform:translateX(-50%) rotate(45deg);box-shadow:0 0 0 3px var(--bg)}
+.rm-axis .scale .ms .ml{position:absolute;top:15px;left:0;transform:translateX(-50%);
+  font-size:9.5px;font-weight:700;color:var(--seed-d);white-space:nowrap}
+.rm-axis .scale .ms.alt .ml{top:29px}
+
+/* 차트 오버레이 — 주간 그리드라인 + 오늘 마커 (track 영역에 정확히 겹침) */
+.tl .chart-ov{position:absolute;top:0;bottom:0;left:200px;right:14px;pointer-events:none;z-index:0}
+.tl .chart-ov .grid-lines{position:absolute;inset:0;display:block;background:none;border:0}
+.tl .chart-ov .grid-lines span{position:absolute;top:0;bottom:0;border-left:1px solid var(--line-2)}
+.tl .chart-ov .today-line{position:absolute;top:0;bottom:0;border-left:2px dashed var(--rose);z-index:3}
+.tl .chart-ov .today-line .nlab{position:absolute;top:4px;left:5px;font-size:9.5px;font-weight:800;
+  color:#fff;background:var(--rose);padding:1px 6px;border-radius:999px;white-space:nowrap}
+.tl .row{position:relative;z-index:1}
+
+/* 라벨: id + 짧은 제목 + 도메인 dtag (2줄) */
+.tl .lbl{display:flex;flex-direction:column;gap:4px;justify-content:center;padding:6px 14px;line-height:1.25}
+.tl .lbl .lh{font-size:12.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tl .lbl .lh .rid{font-family:"SF Mono",ui-monospace,Menlo,monospace;color:var(--faint);font-size:11px;margin-right:5px}
+
+/* 막대 안 텍스트 + 진행 채움 힌트 */
+.tl .barx{box-shadow:var(--shadow)}
+.tl .barx .bt{position:relative;z-index:2;overflow:hidden;text-overflow:ellipsis}
+.tl .barx .pf{position:absolute;left:0;top:0;bottom:0;z-index:1;
+  background:rgba(255,255,255,.30);border-right:2px solid rgba(255,255,255,.85)}
+[data-theme="dark"] .tl .barx .pf{background:rgba(0,0,0,.24);border-right-color:rgba(0,0,0,.55)}
+.tl .barx.is-done{opacity:.42}
+.tl .barx.is-doing{opacity:.96}
+.tl .row.hide{display:none}
+
+/* 도메인 색 범례 */
+.legend{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin:14px 0 0;font-size:12px;color:var(--muted)}
+.legend .li{display:inline-flex;align-items:center;gap:6px;font-weight:600}
+.legend .sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+.sw.b{background:var(--blue)}.sw.v{background:var(--violet)}.sw.g{background:var(--seed)}
+.sw.a{background:var(--amber)}.sw.r{background:var(--rose)}.sw.t{background:var(--teal)}
+.legend .sep{color:var(--line);user-select:none}
+.legend .dia-k{width:9px;height:9px;border-radius:2px;background:var(--seed-d);transform:rotate(45deg);display:inline-block}
+
+.mscap{font-size:12px;color:var(--muted);margin:8px 0 0}
+.mscap b{color:var(--ink)}
+.mscap .dia-k{width:8px;height:8px;border-radius:2px;background:var(--seed-d);transform:rotate(45deg);display:inline-block;margin-right:5px}
+
+@media(max-width:820px){
+  .rm-axis{grid-template-columns:130px 1fr}
+  .tl .chart-ov{left:130px}
+}
+</style></head>
+<body><div class="wrap wide">
+<a class="back" href="index.html">← 카탈로그</a>
+<header class="head">
+  <span class="brand">🌱 민서의 워크스페이스</span>
+  <h1>07 Roadmap Timeline</h1>
+  <button class="ttog" id="tt" title="테마 전환">🌙</button>
+  <span class="stamp">12개 업무 · 2026-07-01</span>
+</header>
+<p class="subtitle">로드맵·간트형 · 주간 타임라인 — 일정과 마일스톤을 보는 뷰</p>
+
+<!-- 통계 -->
+<div class="stats">
+  <div class="stat"><div class="num">12</div><div class="lab">전체 업무</div></div>
+  <div class="stat s-amber"><div class="num">4</div><div class="lab">진행 중</div></div>
+  <div class="stat s-rose"><div class="num">4</div><div class="lab">금주 마감 (~7/5)</div></div>
+  <div class="stat s-done"><div class="num">3</div><div class="lab">완료</div></div>
+</div>
+
+<!-- 도메인 필터 -->
+<div class="toolbar">
+  <div class="chips" id="chips">
+    <span class="chip on" data-d="all">전체</span>
+    <span class="chip" data-d="report">보고</span>
+    <span class="chip" data-d="research">리서치</span>
+    <span class="chip" data-d="ops">운영</span>
+    <span class="chip" data-d="plan">기획</span>
+    <span class="chip" data-d="content">콘텐츠</span>
+    <span class="chip" data-d="dev">개발</span>
+  </div>
+</div>
+
+<!-- 날짜 축 -->
+<div class="rmbox">
+  <div class="rm-axis">
+    <div class="sp">타임라인 · 06/24 → 07/12</div>
+    <div class="scale">
+      <span class="tick" style="left:0%">6/24</span>
+      <span class="tick now" style="left:38.8889%">7/1</span>
+      <span class="tick" style="left:77.7778%">7/8</span>
+      <span class="tick" style="left:100%;transform:translateX(-100%)">7/12</span>
+      <div class="ms" style="left:61.1111%"><div class="dia"></div><div class="ml">분기 마감 7/5</div></div>
+      <div class="ms alt" style="left:72.2222%"><div class="dia"></div><div class="ml">OKR 확정 7/7</div></div>
+      <div class="ms" style="left:100%"><div class="dia"></div><div class="ml" style="transform:translateX(-88%)">월간 리포트 7/12</div></div>
+    </div>
+  </div>
+
+  <!-- 간트 -->
+  <div class="tl" id="tl">
+    <div class="chart-ov">
+      <div class="grid-lines">
+        <span style="left:0%"></span>
+        <span style="left:38.8889%"></span>
+        <span style="left:77.7778%"></span>
+      </div>
+      <div class="today-line" style="left:38.8889%"><span class="nlab">오늘</span></div>
+    </div>
+
+    <div class="row" data-domain="dev">
+      <div class="lbl"><div class="lh"><span class="rid">011</span>알림 버그 수정</div><span class="dtag dev">개발</span></div>
+      <div class="track"><div class="barx t is-done" style="left:0%;width:22.2222%" title="06/24 → 06/28 · 완료 100%"><span class="bt">알림 버그 수정</span></div></div>
+    </div>
+
+    <div class="row" data-domain="content">
+      <div class="lbl"><div class="lh"><span class="rid">009</span>카피 리라이트</div><span class="dtag content">콘텐츠</span></div>
+      <div class="track"><div class="barx r is-done" style="left:5.5556%;width:22.2222%" title="06/25 → 06/29 · 완료 100%"><span class="bt">카피 리라이트</span></div></div>
+    </div>
+
+    <div class="row" data-domain="dev">
+      <div class="lbl"><div class="lh"><span class="rid">007</span>인덱싱 성능 개선</div><span class="dtag dev">개발</span></div>
+      <div class="track"><div class="barx t is-doing" style="left:11.1111%;width:33.3333%" title="06/26 → 07/02 · 진행 75%"><span class="pf" style="width:75%"></span><span class="bt">인덱싱 성능 · 75%</span></div></div>
+    </div>
+
+    <div class="row" data-domain="ops">
+      <div class="lbl"><div class="lh"><span class="rid">004</span>피드백 200건 태깅</div><span class="dtag ops">운영</span></div>
+      <div class="track"><div class="barx is-done" style="left:16.6667%;width:16.6667%" title="06/27 → 06/30 · 완료 100%"><span class="bt">피드백 태깅</span></div></div>
+    </div>
+
+    <div class="row" data-domain="report">
+      <div class="lbl"><div class="lh"><span class="rid">001</span>3분기 보고서 초안</div><span class="dtag report">보고</span></div>
+      <div class="track"><div class="barx b is-doing" style="left:22.2222%;width:27.7778%" title="06/28 → 07/03 · 진행 60%"><span class="pf" style="width:60%"></span><span class="bt">운영 보고서 초안 · 60%</span></div></div>
+    </div>
+
+    <div class="row" data-domain="research">
+      <div class="lbl"><div class="lh"><span class="rid">010</span>사용자 인터뷰 5건</div><span class="dtag research">리서치</span></div>
+      <div class="track"><div class="barx v is-doing" style="left:22.2222%;width:61.1111%" title="06/28 → 07/09 · 진행 40%"><span class="pf" style="width:40%"></span><span class="bt">사용자 인터뷰 · 40%</span></div></div>
+    </div>
+
+    <div class="row" data-domain="research">
+      <div class="lbl"><div class="lh"><span class="rid">002</span>온보딩 리서치</div><span class="dtag research">리서치</span></div>
+      <div class="track"><div class="barx v" style="left:27.7778%;width:50%" title="06/29 → 07/08 · 대기"><span class="bt">온보딩 플로우 리서치</span></div></div>
+    </div>
+
+    <div class="row" data-domain="ops">
+      <div class="lbl"><div class="lh"><span class="rid">003</span>회의록 자동화</div><span class="dtag ops">운영</span></div>
+      <div class="track"><div class="barx" style="left:27.7778%;width:33.3333%" title="06/29 → 07/05 · 대기"><span class="bt">회의록 정리 자동화</span></div></div>
+    </div>
+
+    <div class="row" data-domain="plan">
+      <div class="lbl"><div class="lh"><span class="rid">005</span>위젯 개편 기획</div><span class="dtag plan">기획</span></div>
+      <div class="track"><div class="barx a is-doing" style="left:33.3333%;width:22.2222%" title="06/30 → 07/04 · 진행 35%"><span class="pf" style="width:35%"></span><span class="bt">위젯 개편 · 35%</span></div></div>
+    </div>
+
+    <div class="row" data-domain="content">
+      <div class="lbl"><div class="lh"><span class="rid">006</span>뉴스레터 12월호</div><span class="dtag content">콘텐츠</span></div>
+      <div class="track"><div class="barx r" style="left:33.3333%;width:55.5556%" title="06/30 → 07/10 · 대기"><span class="bt">이메일 뉴스레터 12월호</span></div></div>
+    </div>
+
+    <div class="row" data-domain="plan">
+      <div class="lbl"><div class="lh"><span class="rid">008</span>분기 OKR 검토</div><span class="dtag plan">기획</span></div>
+      <div class="track"><div class="barx a" style="left:33.3333%;width:38.8889%" title="06/30 → 07/07 · 대기"><span class="bt">분기 OKR 초안 검토</span></div></div>
+    </div>
+
+    <div class="row" data-domain="ops">
+      <div class="lbl"><div class="lh"><span class="rid">012</span>월간 리포트 배포</div><span class="dtag ops">운영</span></div>
+      <div class="track"><div class="barx" style="left:33.3333%;width:66.6667%" title="06/30 → 07/12 · 대기"><span class="bt">월간 운영 리포트 배포</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 범례 -->
+<div class="legend">
+  <span class="li"><span class="sw b"></span>보고</span>
+  <span class="li"><span class="sw v"></span>리서치</span>
+  <span class="li"><span class="sw g"></span>운영</span>
+  <span class="li"><span class="sw a"></span>기획</span>
+  <span class="li"><span class="sw r"></span>콘텐츠</span>
+  <span class="li"><span class="sw t"></span>개발</span>
+  <span class="sep">|</span>
+  <span class="li"><span class="dia-k"></span>마일스톤</span>
+  <span class="li" style="opacity:.55">옅은 막대 = 완료</span>
+  <span class="li">막대 안 채움 = 진행률</span>
+</div>
+<p class="mscap"><span class="dia-k"></span><b>마일스톤</b> — 분기 마감 7/5 · OKR 확정 7/7 · 월간 리포트 7/12 &nbsp;|&nbsp; 점선은 오늘(7/1)</p>
+
+<footer class="foot">🌱 Seed · 대시보드 카탈로그 — 07 Roadmap Timeline · 더블클릭으로 열리는 정적 파일, 서버 불필요.</footer>
+</div>
+
+<script>
+(function(){
+  /* 테마 토글 */
+  var root=document.documentElement, tt=document.getElementById('tt');
+  try{ if(localStorage.getItem('seed-theme')==='dark'){root.dataset.theme='dark';tt.textContent='☀️';} }catch(e){}
+  tt.addEventListener('click',function(){
+    var dark=root.dataset.theme==='dark';
+    if(dark){delete root.dataset.theme;tt.textContent='🌙';} else {root.dataset.theme='dark';tt.textContent='☀️';}
+    try{localStorage.setItem('seed-theme',dark?'light':'dark');}catch(e){}
+  });
+
+  /* 도메인 필터 칩 (다중 선택, '전체'면 전부 표시) */
+  var chips=document.getElementById('chips'), rows=document.querySelectorAll('#tl .row');
+  var active={};
+  function apply(){
+    var keys=Object.keys(active);
+    var any=keys.length>0;
+    rows.forEach(function(r){
+      var show=!any||active[r.dataset.domain];
+      r.classList.toggle('hide',!show);
+    });
+    var allChip=chips.querySelector('[data-d="all"]');
+    allChip.classList.toggle('on',!any);
+  }
+  chips.addEventListener('click',function(e){
+    var c=e.target.closest('.chip'); if(!c) return;
+    var d=c.dataset.d;
+    if(d==='all'){
+      active={};
+      chips.querySelectorAll('.chip').forEach(function(x){x.classList.toggle('on',x.dataset.d==='all');});
+    } else {
+      if(active[d]){delete active[d];c.classList.remove('on');}
+      else {active[d]=true;c.classList.add('on');}
+    }
+    apply();
+  });
+  apply();
+})();
+</script>
+</body></html>

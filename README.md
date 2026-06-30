@@ -26,6 +26,9 @@
 |---|---|
 | ![문서](docs/img/document.png) | **[docs/demo/](docs/demo/deliverables/_dashboard.html) 를 브라우저로 열어보세요** — 위 스크린샷을 실제로 클릭·검색·정렬할 수 있는 박제 워크스페이스입니다. |
 
+> 🎨 **대시보드 카탈로그 — [docs/dashboard-catalog/](docs/dashboard-catalog/index.html)**
+> 같은 데이터를 10가지 방식으로 빚은 대시보드 시안 모음(테이블·칸반·갤러리·차트·타임라인·기여 그래프·다크 집중·리뷰 등). 마음에 드는 한 컨셉을 골라 채택하세요. 전부 의존성 0 · 더블클릭으로 열리는 자기완결 단일 파일.
+
 ---
 
 ## Seed 가 뭔가요
@@ -163,6 +166,7 @@ open deliverables/_dashboard.html
 ## 더 보기
 
 - 전체 설계: [`docs/DESIGN.md`](docs/DESIGN.md) — 원탁 × Karpathy 혼합, 파이프라인, 명명 규약
+- 대시보드 카탈로그: [`docs/dashboard-catalog/`](docs/dashboard-catalog/index.html) — 10개 컨셉 시안 (브라우저로 열기)
 - 프로젝트 포스터: [`docs/poster.html`](docs/poster.html) (브라우저로 열기)
 - 라이선스: [`LICENSE`](LICENSE) (MIT)
 

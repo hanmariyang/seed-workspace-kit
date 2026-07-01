@@ -9,8 +9,10 @@
   start <id>                                       업무 진행중(doing)
   deliver "제목" [--task ID] [--from FILE] [--slug S]   산출물 생성 (md+html+DB) + 대시보드 재빌드
   build                                            대시보드만 재빌드
+  view                                             대시보드를 기본 브라우저로 열기 (mac/linux/win 자동)
 
 명명 규약은 seed.json 이 강제한다 (PREFIX / id_pad / slug_lang).
+Python 3.8+ (표준 라이브러리만).
 """
 from __future__ import annotations
 import argparse
@@ -189,6 +191,27 @@ def cmd_build(_):
     print(f"↻ 대시보드 빌드 → {DASH.relative_to(ROOT)}")
 
 
+def _open(path: Path) -> None:
+    """파일을 OS 기본 앱으로 연다 — mac(open)·windows(startfile)·linux(xdg-open) 자동."""
+    import subprocess, os
+    try:
+        if sys.platform == "darwin":
+            subprocess.run(["open", str(path)], check=False)
+        elif os.name == "nt":
+            os.startfile(str(path))  # type: ignore[attr-defined]  # Windows 전용
+        else:  # linux / 기타 유닉스
+            subprocess.run(["xdg-open", str(path)], check=False)
+    except Exception as e:
+        print(f"자동 열기 실패 — 아래 파일을 직접 여세요:\n  {path}\n  ({e})")
+
+
+def cmd_view(_):
+    if not DASH.exists():
+        render.build_dashboard(DB, DASH)
+    print(f"🌱 대시보드 열기 → {DASH.relative_to(ROOT)}")
+    _open(DASH)
+
+
 # ---------------------------------------------------------------- argparse
 def main():
     p = argparse.ArgumentParser(prog="ws", description="Seed 워크스페이스 DB 헬퍼")
@@ -212,6 +235,7 @@ def main():
     pv.set_defaults(fn=cmd_deliver)
 
     sub.add_parser("build").set_defaults(fn=cmd_build)
+    sub.add_parser("view").set_defaults(fn=cmd_view)
 
     args = p.parse_args()
     args.fn(args)

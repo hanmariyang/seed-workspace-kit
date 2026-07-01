@@ -24,14 +24,18 @@ jobs:
       - name: 도구 문법 검사
         run: python -c "import ast, glob; [ast.parse(open(f, encoding='utf-8').read(), f) for f in glob.glob('bin/*.py')]; print('문법 OK')"
 
-      - name: 워크스페이스 초기화 + 렌더 스모크
+      - name: 해피패스 스모크 (init → add → deliver → 대시보드)
         run: |
           python bin/ws.py init
           python bin/ws.py add "CI 스모크 업무" --domain 운영 --priority 1
           python bin/ws.py list
-          python bin/render.py
+          echo "# CI 산출물" | python bin/ws.py deliver "CI 산출물" --task 1
+          # 산출물 md+html 쌍이 생겼나
+          ls deliverables/*/*.md deliverables/*/*.html >/dev/null && echo "산출물 md+html OK"
+          # 대시보드가 재빌드되고 산출물을 참조하나
           test -f deliverables/_dashboard.html && echo "대시보드 빌드 OK"
           grep -q "대시보드" deliverables/_dashboard.html && echo "대시보드 내용 OK"
+          grep -q "CI 산출물" deliverables/_dashboard.html && echo "산출물 대시보드 반영 OK"
 
       - name: 로컬 상태파일이 산출물로 새지 않았는지 확인
         run: |

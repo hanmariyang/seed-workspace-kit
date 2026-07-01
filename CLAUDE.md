@@ -54,7 +54,7 @@ python bin/ws.py start 3              # 진행중
 python bin/ws.py done 3               # 완료
 python bin/ws.py deliver "보고서 제목" --task 3 --from draft.md
 python bin/ws.py build                # 대시보드만 재빌드
-open deliverables/_dashboard.html     # 대시보드 열기
+python bin/ws.py view                 # 대시보드 열기 (mac·linux·windows 자동)
 ```
 
 ## 스킬

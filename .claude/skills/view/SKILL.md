@@ -11,15 +11,17 @@ description: >
 
 ## 절차
 
-1. 대시보드를 최신으로 재빌드(안전):
-   ```bash
-   python bin/ws.py build
-   ```
-2. 열기:
-   ```bash
-   open deliverables/_dashboard.html          # macOS
-   # xdg-open deliverables/_dashboard.html     # Linux
-   ```
+한 줄이면 된다 — 재빌드(없으면)까지 하고 OS 기본 브라우저로 연다 (mac·linux·windows 자동 감지):
+```bash
+python bin/ws.py view
+```
+
+직접 열고 싶으면 OS 별로:
+```bash
+open deliverables/_dashboard.html          # macOS
+xdg-open deliverables/_dashboard.html      # Linux
+start deliverables\_dashboard.html         # Windows
+```
 
 ## 옵션 — 로컬 서버 (`--serve`)
 

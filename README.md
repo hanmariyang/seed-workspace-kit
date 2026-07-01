@@ -143,13 +143,13 @@ cd my-workspace
 /view    # 대시보드 열기
 ```
 
-**손으로 먼저 보고 싶다면** (Claude Code 없이도):
+**손으로 먼저 보고 싶다면** (Claude Code 없이도) — **Python 3.8+** 만 있으면 됩니다 (`pip install` 불필요):
 
 ```bash
-python bin/ws.py init
-python bin/ws.py add "첫 할 일" --domain 운영 --priority 1
-python bin/ws.py deliver "첫 산출물"
-open deliverables/_dashboard.html
+python3 bin/ws.py init                       # python 이 3.x 면 python 도 가능
+python3 bin/ws.py add "첫 할 일" --domain 운영 --priority 1
+python3 bin/ws.py deliver "첫 산출물"
+python3 bin/ws.py view                        # 대시보드 열기 (mac·linux·windows 자동)
 ```
 
 ---

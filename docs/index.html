@@ -2,17 +2,17 @@
 <html lang="ko"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🌱 Seed — 인터뷰 한 번으로 자라는 Claude Code 워크스페이스</title>
-<meta name="description" content="복사가 아니라 인터뷰. Seed는 당신에게 6~8개를 묻고, 그 답으로 당신 업무에 맞는 Claude Code 워크스페이스를 만들어 냅니다. 의존성 0.">
+<meta name="description" content="흩어진 할 일·문서·메모를 한눈에 보이는 대시보드 하나로. 질문 몇 개에 답하면 내 업무에 맞춘 업무 공간(Claude Code 워크스페이스)이 자동으로 차려집니다. 설치도 서버도 없이.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="🌱 Seed — 인터뷰 한 번으로 자라는 Claude Code 워크스페이스">
-<meta property="og:description" content="복사가 아니라 인터뷰. 당신에게 6~8개를 묻고, 그 답으로 당신 업무에 맞는 워크스페이스를 지어 냅니다. 의존성 0.">
+<meta property="og:title" content="🌱 Seed — 인터뷰 한 번으로 자라는 나만의 업무 공간 (Claude Code)">
+<meta property="og:description" content="내 일이 사는 폴더를, 질문 몇 개에 답하면 내 업무에 맞춰 차려 줍니다. 흩어진 걸 모으고·한눈에 보이고·저장하면 알아서 정리. 설치도 서버도 없이.">
 <meta property="og:url" content="https://hanmariyang.github.io/seed-workspace-kit/">
 <meta property="og:image" content="https://hanmariyang.github.io/seed-workspace-kit/img/og.png">
 <meta property="og:image:width" content="1280">
 <meta property="og:image:height" content="640">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="🌱 Seed — 인터뷰 한 번으로 자라는 Claude Code 워크스페이스">
-<meta name="twitter:description" content="복사가 아니라 인터뷰. 그 답으로 당신 업무에 맞는 워크스페이스를 지어 냅니다. 의존성 0.">
+<meta name="twitter:title" content="🌱 Seed — 인터뷰 한 번으로 자라는 나만의 업무 공간 (Claude Code)">
+<meta name="twitter:description" content="내 일이 사는 폴더를, 질문 몇 개에 답하면 내 업무에 맞춰 차려 줍니다. 설치도 서버도 없이.">
 <meta name="twitter:image" content="https://hanmariyang.github.io/seed-workspace-kit/img/og.png">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2327a456'/%3E%3Cpath d='M16 26 V15.5' stroke='%23fff' stroke-width='2.6' stroke-linecap='round'/%3E%3Cpath d='M15.5 17.5 C10 17.8 6.6 14.6 6.4 9.6 C12 9.3 15.3 12.5 15.5 17.5 Z' fill='%23d7f4e1'/%3E%3Cpath d='M16.5 15.5 C21.4 14 24 10.2 23.2 5.6 C18.4 7 15.7 10.9 16.5 15.5 Z' fill='%23fff'/%3E%3C/svg%3E">
 <style>
@@ -74,6 +74,19 @@ section{padding:64px 0}
 .eyebrow{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--seed-d);font-weight:800}
 .h2{font-size:clamp(26px,4vw,40px);font-weight:850;letter-spacing:-1.2px;margin:10px 0 0;line-height:1.12}
 .lead{font-size:16px;color:var(--muted);margin-top:14px;max-width:680px}
+
+/* ===== 30초 이해 ===== */
+.explain{border-bottom:1px solid var(--line)}
+.steps{display:grid;grid-template-columns:1fr 40px 1fr 40px 1fr;gap:0;align-items:stretch;margin-top:28px}
+@media(max-width:820px){.steps{grid-template-columns:1fr;gap:12px}.steps .stepar{transform:rotate(90deg);height:24px}}
+.step{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 20px;box-shadow:var(--shadow);text-align:center}
+.step .i{font-size:32px;line-height:1}
+.step b{display:block;font-size:17px;margin:11px 0 6px;letter-spacing:-.3px}
+.step span{font-size:13px;color:var(--muted);line-height:1.55}
+.stepar{display:grid;place-items:center;font-size:24px;color:var(--seed);font-weight:800}
+.benefit{margin-top:24px;text-align:center;font-size:16px;color:var(--ink);
+  background:var(--seed-l);border:1px dashed #b6dec4;border-radius:14px;padding:16px 20px}
+.benefit b{color:var(--seed-d)}
 
 /* ===== 인터뷰 (centerpiece) ===== */
 .interview{background:linear-gradient(180deg,#fff,#f4f8f4);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
@@ -152,8 +165,9 @@ footer a{color:var(--seed-d);font-weight:600}
 <nav><div class="in">
   <a class="logo" href="#top"><span class="m"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 26 V15.5' stroke='%23fff' stroke-width='2.6' stroke-linecap='round'/%3E%3Cpath d='M15.5 17.5 C10 17.8 6.6 14.6 6.4 9.6 C12 9.3 15.3 12.5 15.5 17.5 Z' fill='%23d7f4e1'/%3E%3Cpath d='M16.5 15.5 C21.4 14 24 10.2 23.2 5.6 C18.4 7 15.7 10.9 16.5 15.5 Z' fill='%23fff'/%3E%3C/svg%3E" width="16"></span>Seed</a>
   <div class="sp">
+    <a class="link" href="#what">이게 뭔가요</a>
     <a class="link" href="#interview">인터뷰</a>
-    <a class="link" href="#catalog">카탈로그</a>
+    <a class="link" href="#catalog">대시보드</a>
     <a class="link" href="poster.html">포스터</a>
     <a class="btn" href="https://github.com/hanmariyang/seed-workspace-kit">GitHub</a>
     <a class="btn pri" href="https://github.com/hanmariyang/seed-workspace-kit/generate">Use this template</a>
@@ -162,9 +176,9 @@ footer a{color:var(--seed-d);font-weight:600}
 
 <header class="hero" id="top"><div class="wrap">
   <div class="seedmark">🌱</div>
-  <h1>인터뷰 한 번으로,<br><span class="g">당신의 워크스페이스</span>가 자란다</h1>
+  <h1>인터뷰 한 번으로,<br><span class="g">당신의 업무 공간</span>이 자란다</h1>
   <p class="tag">Plant once. Grow your own Claude Code workspace.</p>
-  <p class="sub">빈 폴더도, 남의 설정을 복붙한 폴더도 아닙니다. Seed는 당신에게 <b>6~8개를 묻고</b>, 그 답으로 디렉토리·로컬 DB·전용 조력 에이전트·산출물 대시보드를 <b>당신에게 맞춰</b> 지어 냅니다. 의존성 0.</p>
+  <p class="sub">흩어진 할 일·문서·메모를 <b>검색되고 한눈에 보이는 대시보드</b> 하나로. Seed가 당신에게 <b>6~8가지를 묻고</b>, 그 답에 맞춰 <b>당신만의 업무 공간</b>을 차려 줍니다. 설치도 서버도 없이 — 파일을 더블클릭하면 열려요.</p>
   <div class="cta">
     <a class="btn pri" href="https://github.com/hanmariyang/seed-workspace-kit/generate">🌱 이 템플릿으로 시작</a>
     <a class="btn" href="#interview">인터뷰가 뭐가 다른데? ↓</a>
@@ -187,9 +201,24 @@ footer a{color:var(--seed-d);font-weight:600}
   </figure>
 </div></header>
 
+<!-- ===== 30초 이해 ===== -->
+<section class="explain" id="what"><div class="wrap">
+  <div class="eyebrow">① 이게 뭔가요 · 30초 이해</div>
+  <h2 class="h2">쉽게 말하면, 이런 거예요</h2>
+  <p class="lead">거창한 도구가 아닙니다. <b>내 일이 사는 폴더</b>를 내 업무에 맞게 차려 주는 것뿐이에요.</p>
+  <div class="steps">
+    <div class="step"><div class="i">🗂️</div><b>업무 공간</b><span>내 일이 사는 폴더<br>할 일·문서·기록이 한곳에<br>(개발자 말로는 '워크스페이스')</span></div>
+    <div class="stepar">→</div>
+    <div class="step"><div class="i">🌱</div><b>인터뷰</b><span>Seed가 내 일에 대해<br>묻는 질문 몇 개<br>답하기만 하면 끝</span></div>
+    <div class="stepar">→</div>
+    <div class="step"><div class="i">📊</div><b>내 맞춤 대시보드</b><span>내 업무에 딱 맞춰<br>자동으로 차려짐<br>더블클릭으로 열림</span></div>
+  </div>
+  <p class="benefit"><b>무엇이 좋아지나</b> — 흩어진 걸 한곳에 <b>모으고</b> · 한눈에 <b>보이고</b> · 저장하면 <b>알아서 정리</b>됩니다.</p>
+</div></section>
+
 <!-- ===== 인터뷰 centerpiece ===== -->
 <section class="interview" id="interview"><div class="wrap">
-  <div class="eyebrow">복사가 아니라 인터뷰</div>
+  <div class="eyebrow">② 인터뷰 · 복사가 아니라 인터뷰</div>
   <h2 class="h2">인터뷰를 하면 뭐가 달라지는데?</h2>
   <p class="lead">남의 워크스페이스를 통째로 복사하면 내 업무와 안 맞아 결국 방치됩니다.
   Seed는 <b>당신을 인터뷰</b>합니다. 같은 질문에 당신이 답하면, 그 답이 그대로 <b>구조·조력자·규약</b>이 됩니다.</p>
@@ -249,7 +278,7 @@ footer a{color:var(--seed-d);font-weight:600}
 
 <!-- ===== 카탈로그 ===== -->
 <section id="catalog" style="background:#f4f8f4;border-top:1px solid var(--line);border-bottom:1px solid var(--line)"><div class="wrap">
-  <div class="eyebrow">같은 데이터, 열 가지 시선</div>
+  <div class="eyebrow">③ 대시보드 · 같은 데이터, 열 가지 시선</div>
   <h2 class="h2">대시보드 카탈로그</h2>
   <p class="lead">기본형이 마음에 안 들면, <b>10가지 컨셉</b> 중 골라 채택하세요. 전부 같은 데모 데이터로 구웠고, 의존성 0 · 더블클릭으로 열립니다.</p>
   <div class="gallery">

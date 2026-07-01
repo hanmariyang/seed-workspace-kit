@@ -113,6 +113,36 @@
   .ph .pt{font-size:13px;font-weight:600;margin-top:5px}
   .ph .ps{font-size:18px;margin-top:8px}
 
+  /* 대시보드 미니 목업 (순수 CSS · 라이트/다크 시연) */
+  .mocks{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:4px 0 18px}
+  .mockwrap .cap{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px}
+  .dm{--m-bg:#f7f9f7;--m-card:#fff;--m-ink:#19211c;--m-muted:#69786d;--m-faint:#94a397;
+    --m-line:#e6ece6;--m-soft:#f1f6f2;--m-seed:#27a456;--m-seed-d:#1c8345;--m-seed-l:#e7f6ec;--m-amber:#d9a400;--m-blue:#3f8ce0;
+    background:var(--m-bg);border:1px solid var(--m-line);border-radius:13px;padding:14px;overflow:hidden}
+  .dm.dv{--m-bg:#0e140f;--m-card:#151d17;--m-ink:#e8efe9;--m-muted:#9aab9e;--m-faint:#67786c;
+    --m-line:#243029;--m-soft:#172019;--m-seed:#a48cec;--m-seed-d:#c3b2f2;--m-seed-l:#241a3a;--m-amber:#e6bb3a;--m-blue:#5ea6f0}
+  .dm .top{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+  .dm .brand{font-size:10.5px;font-weight:800;color:var(--m-seed-d);background:var(--m-seed-l);padding:3px 9px;border-radius:999px}
+  .dm .dt{font-size:14px;font-weight:800;color:var(--m-ink);letter-spacing:-.3px}
+  .dm .tog{margin-left:auto;width:20px;height:20px;border-radius:999px;border:1px solid var(--m-line);display:grid;place-items:center;font-size:10px}
+  .dm .st{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:11px}
+  .dm .sc{background:var(--m-card);border:1px solid var(--m-line);border-radius:8px;padding:8px 9px;position:relative;overflow:hidden}
+  .dm .sc::after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--m-seed)}
+  .dm .sc.b::after{background:var(--m-amber)} .dm .sc.c::after{background:var(--m-seed-d)} .dm .sc.d::after{background:var(--m-blue)}
+  .dm .sc .n{font-size:16px;font-weight:800;color:var(--m-ink);line-height:1}
+  .dm .sc .n small{font-size:9px;color:var(--m-muted)}
+  .dm .sc .l{font-size:8.5px;color:var(--m-muted);margin-top:3px;font-weight:600}
+  .dm .tbl{background:var(--m-card);border:1px solid var(--m-line);border-radius:9px;overflow:hidden}
+  .dm .tr{display:grid;grid-template-columns:30px 1fr auto auto;gap:8px;align-items:center;padding:7px 10px;border-bottom:1px solid var(--m-line);font-size:11px}
+  .dm .tr:last-child{border-bottom:none}
+  .dm .tr .rid{font-family:ui-monospace,Menlo,monospace;color:var(--m-faint);font-size:10px}
+  .dm .tr .rt{color:var(--m-ink);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .dm .bdg{font-size:9px;font-weight:800;padding:2px 7px;border-radius:999px}
+  .dm .bdg.doing{background:var(--m-seed-l);color:var(--m-seed-d)}
+  .dm .bdg.todo{background:var(--m-soft);color:var(--m-muted)}
+  .dm .dp{font-size:9px;font-weight:700;color:var(--m-muted);background:var(--m-soft);padding:2px 7px;border-radius:5px;white-space:nowrap}
+  .dm .dp::before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--m-seed);margin-right:4px;vertical-align:middle}
+
   footer{text-align:center;color:var(--muted);font-size:12.5px;padding:18px 0 4px}
   footer b{color:var(--seed-d)}
   .meta{text-align:center;color:var(--faint);font-size:11px;margin-top:4px}
@@ -308,6 +338,44 @@
       기본형 외에 <b style="color:var(--seed-d)">10가지 컨셉 카탈로그</b>(테이블·칸반·갤러리·차트·타임라인·기여 그래프·다크 집중·리뷰…)를
       두고 마음에 드는 골격을 골라 채택할 수 있다.
     </p>
+
+    <div class="mocks">
+      <div class="mockwrap">
+        <div class="cap">라이트 · green</div>
+        <div class="dm">
+          <div class="top"><span class="brand">🌱 My Workspace</span><span class="dt">대시보드</span><span class="tog">🌙</span></div>
+          <div class="st">
+            <div class="sc"><div class="n">6</div><div class="l">전체 업무</div></div>
+            <div class="sc b"><div class="n">2</div><div class="l">진행 중</div></div>
+            <div class="sc c"><div class="n">1<small> ·17%</small></div><div class="l">완료</div></div>
+            <div class="sc d"><div class="n">3</div><div class="l">산출물</div></div>
+          </div>
+          <div class="tbl">
+            <div class="tr"><span class="rid">#001</span><span class="rt">3분기 운영 보고서 초안</span><span class="bdg doing">진행</span><span class="dp">보고</span></div>
+            <div class="tr"><span class="rid">#003</span><span class="rt">주간 회의록 정리 자동화</span><span class="bdg todo">대기</span><span class="dp">운영</span></div>
+            <div class="tr"><span class="rid">#005</span><span class="rt">대시보드 위젯 개편 기획</span><span class="bdg doing">진행</span><span class="dp">기획</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="mockwrap">
+        <div class="cap">다크 · violet</div>
+        <div class="dm dv">
+          <div class="top"><span class="brand">🌱 My Workspace</span><span class="dt">대시보드</span><span class="tog">☀️</span></div>
+          <div class="st">
+            <div class="sc"><div class="n">6</div><div class="l">전체 업무</div></div>
+            <div class="sc b"><div class="n">2</div><div class="l">진행 중</div></div>
+            <div class="sc c"><div class="n">1<small> ·17%</small></div><div class="l">완료</div></div>
+            <div class="sc d"><div class="n">3</div><div class="l">산출물</div></div>
+          </div>
+          <div class="tbl">
+            <div class="tr"><span class="rid">#001</span><span class="rt">3분기 운영 보고서 초안</span><span class="bdg doing">진행</span><span class="dp">보고</span></div>
+            <div class="tr"><span class="rid">#003</span><span class="rt">주간 회의록 정리 자동화</span><span class="bdg todo">대기</span><span class="dp">운영</span></div>
+            <div class="tr"><span class="rid">#005</span><span class="rt">대시보드 위젯 개편 기획</span><span class="bdg doing">진행</span><span class="dp">기획</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div style="display:flex;gap:22px;flex-wrap:wrap;margin-top:16px">
       <div>
         <div style="font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:9px">라이트 · 다크</div>

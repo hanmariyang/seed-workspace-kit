@@ -27,6 +27,9 @@
   - 쌓이는 텍스트 지식(정책·배운 것·결정 이유) → `wiki/*.md`
 - **모든 산출물은 `.md` + `.html` 쌍으로 저장**되고, 저장 즉시 `deliverables/_dashboard.html` 이 재빌드됩니다.
 - **의존성 0** — `bin/ws.py`·`bin/render.py` 는 Python 표준 라이브러리만 씁니다.
+- **테마 커스텀** — `seed.json` 의 `theme` 로 대시보드·문서 색을 바꿉니다.
+  - `accent`: `green`(기본)·`blue`·`violet`·`teal`·`amber`·`rose` · `mode`: `light`(기본)·`dark`
+  - 대시보드 우상단 🌙 버튼으로 라이트/다크 즉시 전환(브라우저에 기억). 다른 골격이 필요하면 `docs/dashboard-catalog/` 10종 참고.
 
 ## 명명 규약 (seed.json 이 강제)
 

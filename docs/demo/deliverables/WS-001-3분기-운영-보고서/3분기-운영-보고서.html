@@ -2,7 +2,8 @@
 <html lang="ko"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>3분기 운영 보고서</title>
-<style>/* Seed — 공용 테마 (산출물 + 대시보드 공유). 라이트 + 세련. */
+<style>/* Seed — 공용 테마 (산출물 + 대시보드 공유). 라이트/다크 · 액센트 커스텀.
+   --seed/--seed-d/--seed-l(액센트)은 seed.json theme.accent 로 render.py 가 덮어씀. */
 :root{
   --bg:#f7f9f7; --ink:#19211c; --muted:#69786d; --faint:#94a397;
   --line:#e6ece6; --line-2:#eef2ee; --card:#ffffff;
@@ -10,10 +11,18 @@
   --shadow:0 1px 2px rgba(20,40,25,.04), 0 8px 24px rgba(20,40,25,.05);
   --r:14px;
 }
+/* ---------- 다크 모드 토큰 ([data-theme="dark"]) ---------- */
+[data-theme="dark"]{
+  --bg:#0e140f; --ink:#e8efe9; --muted:#9aab9e; --faint:#67786c;
+  --line:#243029; --line-2:#1b241e; --card:#151d17;
+  --seed:#3ecb72; --seed-d:#7fe0a0; --seed-l:#16291d; --soft:#172019;
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 28px rgba(0,0,0,.35);
+}
 *{box-sizing:border-box}
 html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 body{margin:0;background:var(--bg);color:var(--ink);line-height:1.7;
-  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Segoe UI",sans-serif;}
+  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Segoe UI",sans-serif;
+  transition:background .2s,color .2s;}
 
 /* ---------- 산출물 문서 ---------- */
 .wrap{max-width:880px;margin:0 auto;padding:48px 24px 72px}
@@ -47,14 +56,28 @@ body{margin:0;background:var(--bg);color:var(--ink);line-height:1.7;
 .dash-head h1{margin:0;font-size:27px;letter-spacing:-.6px}
 .dash-head .stamp{margin-left:auto;color:var(--faint);font-size:12.5px}
 
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:26px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:26px}
 .stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
   padding:20px 22px;box-shadow:var(--shadow);position:relative;overflow:hidden}
 .stat::after{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--seed);opacity:.8}
-.stat .num{font-size:34px;font-weight:800;color:var(--ink);line-height:1;letter-spacing:-1px}
+.stat .num{font-size:32px;font-weight:800;color:var(--ink);line-height:1;letter-spacing:-1px}
+.stat .num small{font-size:16px;font-weight:700;color:var(--muted);margin-left:1px}
 .stat .lab{font-size:12.5px;color:var(--muted);margin-top:7px;font-weight:600}
+.stat.s-doing::after{background:#d9a400}
 .stat.s-done::after{background:var(--seed-d)}
 .stat.s-deliv::after{background:#3f8ce0}
+
+/* 테마 토글 버튼 */
+.ttog{border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:999px;
+  width:34px;height:34px;cursor:pointer;font-size:15px;display:grid;place-items:center;
+  transition:all .12s;flex:0 0 auto}
+.ttog:hover{border-color:var(--seed);color:var(--seed-d)}
+
+/* 도메인 pill */
+.dtag{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 9px;border-radius:6px;
+  background:var(--soft);color:var(--muted);white-space:nowrap}
+.dtag::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;
+  margin-right:6px;vertical-align:middle;background:var(--seed);opacity:.85}
 
 /* 툴바 */
 .toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
@@ -111,13 +134,23 @@ body{margin:0;background:var(--bg);color:var(--ink);line-height:1.7;
 
 .dash-foot{margin-top:40px;color:var(--faint);font-size:12px;text-align:center}
 
+/* ---------- 다크 모드 보정 (라이트 고정색을 토큰화) ---------- */
+.grid tbody tr:hover td{background:var(--soft)}
+[data-theme="dark"] .b-todo{background:#20291f;color:#9aab9e}
+[data-theme="dark"] .b-doing{background:#2c2510;color:#e6bb3a}
+[data-theme="dark"] .b-dropped{background:#2c1818;color:#f0743f}
+[data-theme="dark"] .chip.on{color:#0e140f}
+[data-theme="dark"] .doc pre{background:#0a0f0b}
+[data-theme="dark"] .doc a{border-bottom-color:var(--seed-d)}
+
 @media(max-width:680px){
   .stats{grid-template-columns:1fr 1fr}
   .dash-head .stamp{margin-left:0;width:100%}
 }
-</style></head>
+</style><style>:root{--seed:#27a456;--seed-d:#1c8345;--seed-l:#e7f6ec}[data-theme="dark"]{--seed:#3ecb72;--seed-d:#7fe0a0;--seed-l:#16291d}</style>
+<script>(function(){var d='light';try{var s=localStorage.getItem('seed-theme');if(s)d=s;}catch(e){}if(d==='dark')document.documentElement.dataset.theme='dark';})();</script></head>
 <body><div class="wrap">
-<header class="doc-head"><h1>3분기 운영 보고서</h1><p class="sub">WS-001-3분기-운영-보고서</p></header>
+<header class="doc-head"><h1>3분기 운영 보고서</h1></header>
 <main class="doc"><h2>요약</h2>
 <p>3분기 운영 지표는 전반적으로 목표를 상회했다. 신규 사용자 유입은 전분기 대비 <strong>+18%</strong>, 핵심 리텐션(D30)은 <strong>41% → 47%</strong> 로 개선됐다. 다만 응대 SLA는 목표(4h)를 초과한 주가 3주 있었다.</p>
 <h2>핵심 지표</h2>

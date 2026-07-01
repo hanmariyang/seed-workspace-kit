@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="ko"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>민서의 워크스페이스 · 대시보드</title>
-<style>/* Seed — 공용 테마 (산출물 + 대시보드 공유). 라이트 + 세련. */
+<title>My Workspace · 대시보드</title>
+<style>/* Seed — 공용 테마 (산출물 + 대시보드 공유). 라이트/다크 · 액센트 커스텀.
+   --seed/--seed-d/--seed-l(액센트)은 seed.json theme.accent 로 render.py 가 덮어씀. */
 :root{
   --bg:#f7f9f7; --ink:#19211c; --muted:#69786d; --faint:#94a397;
   --line:#e6ece6; --line-2:#eef2ee; --card:#ffffff;
@@ -10,10 +11,18 @@
   --shadow:0 1px 2px rgba(20,40,25,.04), 0 8px 24px rgba(20,40,25,.05);
   --r:14px;
 }
+/* ---------- 다크 모드 토큰 ([data-theme="dark"]) ---------- */
+[data-theme="dark"]{
+  --bg:#0e140f; --ink:#e8efe9; --muted:#9aab9e; --faint:#67786c;
+  --line:#243029; --line-2:#1b241e; --card:#151d17;
+  --seed:#3ecb72; --seed-d:#7fe0a0; --seed-l:#16291d; --soft:#172019;
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 28px rgba(0,0,0,.35);
+}
 *{box-sizing:border-box}
 html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 body{margin:0;background:var(--bg);color:var(--ink);line-height:1.7;
-  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Segoe UI",sans-serif;}
+  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Segoe UI",sans-serif;
+  transition:background .2s,color .2s;}
 
 /* ---------- 산출물 문서 ---------- */
 .wrap{max-width:880px;margin:0 auto;padding:48px 24px 72px}
@@ -47,14 +56,28 @@ body{margin:0;background:var(--bg);color:var(--ink);line-height:1.7;
 .dash-head h1{margin:0;font-size:27px;letter-spacing:-.6px}
 .dash-head .stamp{margin-left:auto;color:var(--faint);font-size:12.5px}
 
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:26px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:26px}
 .stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
   padding:20px 22px;box-shadow:var(--shadow);position:relative;overflow:hidden}
 .stat::after{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--seed);opacity:.8}
-.stat .num{font-size:34px;font-weight:800;color:var(--ink);line-height:1;letter-spacing:-1px}
+.stat .num{font-size:32px;font-weight:800;color:var(--ink);line-height:1;letter-spacing:-1px}
+.stat .num small{font-size:16px;font-weight:700;color:var(--muted);margin-left:1px}
 .stat .lab{font-size:12.5px;color:var(--muted);margin-top:7px;font-weight:600}
+.stat.s-doing::after{background:#d9a400}
 .stat.s-done::after{background:var(--seed-d)}
 .stat.s-deliv::after{background:#3f8ce0}
+
+/* 테마 토글 버튼 */
+.ttog{border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:999px;
+  width:34px;height:34px;cursor:pointer;font-size:15px;display:grid;place-items:center;
+  transition:all .12s;flex:0 0 auto}
+.ttog:hover{border-color:var(--seed);color:var(--seed-d)}
+
+/* 도메인 pill */
+.dtag{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 9px;border-radius:6px;
+  background:var(--soft);color:var(--muted);white-space:nowrap}
+.dtag::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;
+  margin-right:6px;vertical-align:middle;background:var(--seed);opacity:.85}
 
 /* 툴바 */
 .toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
@@ -111,20 +134,32 @@ body{margin:0;background:var(--bg);color:var(--ink);line-height:1.7;
 
 .dash-foot{margin-top:40px;color:var(--faint);font-size:12px;text-align:center}
 
+/* ---------- 다크 모드 보정 (라이트 고정색을 토큰화) ---------- */
+.grid tbody tr:hover td{background:var(--soft)}
+[data-theme="dark"] .b-todo{background:#20291f;color:#9aab9e}
+[data-theme="dark"] .b-doing{background:#2c2510;color:#e6bb3a}
+[data-theme="dark"] .b-dropped{background:#2c1818;color:#f0743f}
+[data-theme="dark"] .chip.on{color:#0e140f}
+[data-theme="dark"] .doc pre{background:#0a0f0b}
+[data-theme="dark"] .doc a{border-bottom-color:var(--seed-d)}
+
 @media(max-width:680px){
   .stats{grid-template-columns:1fr 1fr}
   .dash-head .stamp{margin-left:0;width:100%}
 }
-</style></head>
+</style><style>:root{--seed:#27a456;--seed-d:#1c8345;--seed-l:#e7f6ec}[data-theme="dark"]{--seed:#3ecb72;--seed-d:#7fe0a0;--seed-l:#16291d}</style>
+<script>(function(){var d='light';try{var s=localStorage.getItem('seed-theme');if(s)d=s;}catch(e){}if(d==='dark')document.documentElement.dataset.theme='dark';})();</script></head>
 <body><div class="dash">
 <header class="dash-head">
-  <span class="brand">🌱 민서의 워크스페이스</span>
+  <span class="brand">🌱 My Workspace</span>
   <h1>대시보드</h1>
-  <span class="stamp">최종 빌드 2026-06-30 23:39</span>
+  <button class="ttog" id="tt" title="라이트/다크 전환" aria-label="테마 전환">🌙</button>
+  <span class="stamp">최종 빌드 2026-07-01 09:44</span>
 </header>
 <section class="stats">
-  <div class="stat"><div class="num">5</div><div class="lab">진행 / 대기</div></div>
-  <div class="stat s-done"><div class="num">1</div><div class="lab">완료</div></div>
+  <div class="stat"><div class="num">6</div><div class="lab">전체 업무</div></div>
+  <div class="stat s-doing"><div class="num">2</div><div class="lab">진행 중</div></div>
+  <div class="stat s-done"><div class="num">1<small>· 17%</small></div><div class="lab">완료</div></div>
   <div class="stat s-deliv"><div class="num">3</div><div class="lab">산출물</div></div>
 </section>
 <div class="toolbar">
@@ -141,7 +176,7 @@ body{margin:0;background:var(--bg);color:var(--ink);line-height:1.7;
   <table class="grid"><thead><tr>
     <th class="s" data-type="num">ID</th><th class="s">제목</th><th class="s">상태</th>
     <th class="s" data-type="num">우선</th><th class="s">도메인</th><th class="s">생성</th>
-  </tr></thead><tbody><tr data-status="todo" data-text="이메일 뉴스레터 12월호 콘텐츠 대기"><td class="id" data-v="6">#006</td><td class="ttl">이메일 뉴스레터 12월호</td><td><span class="badge b-todo">대기</span></td><td data-v="3"><span class="prio p-lo">낮음</span></td><td class="dim">콘텐츠</td><td class="dim">2026-06-30</td></tr><tr data-status="doing" data-text="대시보드 위젯 개편 기획 기획 진행"><td class="id" data-v="5">#005</td><td class="ttl">대시보드 위젯 개편 기획</td><td><span class="badge b-doing">진행</span></td><td data-v="1"><span class="prio p-hi">높음</span></td><td class="dim">기획</td><td class="dim">2026-06-30</td></tr><tr data-status="done" data-text="고객 피드백 200건 태깅 운영 완료"><td class="id" data-v="4">#004</td><td class="ttl">고객 피드백 200건 태깅</td><td><span class="badge b-done">완료</span></td><td data-v="3"><span class="prio p-lo">낮음</span></td><td class="dim">운영</td><td class="dim">2026-06-30</td></tr><tr data-status="todo" data-text="주간 회의록 정리 자동화 운영 대기"><td class="id" data-v="3">#003</td><td class="ttl">주간 회의록 정리 자동화</td><td><span class="badge b-todo">대기</span></td><td data-v="2"><span class="prio p-mid">보통</span></td><td class="dim">운영</td><td class="dim">2026-06-30</td></tr><tr data-status="todo" data-text="신규 온보딩 플로우 리서치 리서치 대기"><td class="id" data-v="2">#002</td><td class="ttl">신규 온보딩 플로우 리서치</td><td><span class="badge b-todo">대기</span></td><td data-v="2"><span class="prio p-mid">보통</span></td><td class="dim">리서치</td><td class="dim">2026-06-30</td></tr><tr data-status="doing" data-text="3분기 운영 보고서 초안 보고 진행"><td class="id" data-v="1">#001</td><td class="ttl">3분기 운영 보고서 초안</td><td><span class="badge b-doing">진행</span></td><td data-v="1"><span class="prio p-hi">높음</span></td><td class="dim">보고</td><td class="dim">2026-06-30</td></tr></tbody></table>
+  </tr></thead><tbody><tr data-status="todo" data-text="이메일 뉴스레터 12월호 콘텐츠 대기"><td class="id" data-v="6">#006</td><td class="ttl">이메일 뉴스레터 12월호</td><td><span class="badge b-todo">대기</span></td><td data-v="3"><span class="prio p-lo">낮음</span></td><td data-v="콘텐츠"><span class="dtag">콘텐츠</span></td><td class="dim">2026-06-30</td></tr><tr data-status="doing" data-text="대시보드 위젯 개편 기획 기획 진행"><td class="id" data-v="5">#005</td><td class="ttl">대시보드 위젯 개편 기획</td><td><span class="badge b-doing">진행</span></td><td data-v="1"><span class="prio p-hi">높음</span></td><td data-v="기획"><span class="dtag">기획</span></td><td class="dim">2026-06-30</td></tr><tr data-status="done" data-text="고객 피드백 200건 태깅 운영 완료"><td class="id" data-v="4">#004</td><td class="ttl">고객 피드백 200건 태깅</td><td><span class="badge b-done">완료</span></td><td data-v="3"><span class="prio p-lo">낮음</span></td><td data-v="운영"><span class="dtag">운영</span></td><td class="dim">2026-06-30</td></tr><tr data-status="todo" data-text="주간 회의록 정리 자동화 운영 대기"><td class="id" data-v="3">#003</td><td class="ttl">주간 회의록 정리 자동화</td><td><span class="badge b-todo">대기</span></td><td data-v="2"><span class="prio p-mid">보통</span></td><td data-v="운영"><span class="dtag">운영</span></td><td class="dim">2026-06-30</td></tr><tr data-status="todo" data-text="신규 온보딩 플로우 리서치 리서치 대기"><td class="id" data-v="2">#002</td><td class="ttl">신규 온보딩 플로우 리서치</td><td><span class="badge b-todo">대기</span></td><td data-v="2"><span class="prio p-mid">보통</span></td><td data-v="리서치"><span class="dtag">리서치</span></td><td class="dim">2026-06-30</td></tr><tr data-status="doing" data-text="3분기 운영 보고서 초안 보고 진행"><td class="id" data-v="1">#001</td><td class="ttl">3분기 운영 보고서 초안</td><td><span class="badge b-doing">진행</span></td><td data-v="1"><span class="prio p-hi">높음</span></td><td data-v="보고"><span class="dtag">보고</span></td><td class="dim">2026-06-30</td></tr></tbody></table>
 </section>
 <section>
   <h2>📄 산출물 <span class="count"></span></h2>
@@ -153,6 +188,17 @@ body{margin:0;background:var(--bg);color:var(--ink);line-height:1.7;
 </div>
 <script>
 (function(){
+  // 테마 토글 (라이트↔다크, localStorage 저장)
+  var tt=document.getElementById('tt'), root=document.documentElement;
+  function syncTt(){ if(tt) tt.textContent=(root.dataset.theme==='dark')?'☀️':'🌙'; }
+  syncTt();
+  if(tt) tt.addEventListener('click',function(){
+    var dark=root.dataset.theme==='dark';
+    if(dark) delete root.dataset.theme; else root.dataset.theme='dark';
+    try{ localStorage.setItem('seed-theme', dark?'light':'dark'); }catch(e){}
+    syncTt();
+  });
+
   var q=document.getElementById('q'), state='all';
   function vis(){
     var term=(q.value||'').trim().toLowerCase();

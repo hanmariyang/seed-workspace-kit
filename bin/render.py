@@ -18,6 +18,50 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 THEME = ROOT / "deliverables" / "_assets" / "theme.css"
 
+# ---------------------------------------------------------------- 테마 커스텀
+# seed.json 의 theme.accent / theme.mode 로 대시보드·문서 색을 바꾼다.
+# 각 액센트 = (라이트: seed, seed-d, seed-l | 다크: seed, seed-d, seed-l)
+ACCENTS = {
+    "green":  ("#27a456", "#1c8345", "#e7f6ec", "#3ecb72", "#7fe0a0", "#16291d"),
+    "blue":   ("#2f7fe0", "#1f5fb8", "#e6eefb", "#5ea6f0", "#9cc6f6", "#16223a"),
+    "violet": ("#7c5cd6", "#5f43b0", "#eee9fb", "#a48cec", "#c3b2f2", "#241a3a"),
+    "teal":   ("#0e9e8e", "#0a7a6e", "#e0f5f2", "#3fc7b6", "#86ddd2", "#0f2b28"),
+    "amber":  ("#d9820a", "#9c5f08", "#fbeecd", "#e6a53a", "#f0c67f", "#2c2110"),
+    "rose":   ("#d6455c", "#b02f46", "#fbe6ea", "#f0748a", "#f4a6b3", "#2c1620"),
+}
+_DEFAULT_THEME = {"accent": "green", "mode": "light"}
+
+
+def _theme_cfg() -> dict:
+    cfg = ROOT / "seed.json"
+    if cfg.exists():
+        try:
+            t = json.loads(cfg.read_text(encoding="utf-8")).get("theme", {})
+            if isinstance(t, dict):
+                return {**_DEFAULT_THEME, **t}
+        except Exception:
+            pass
+    return dict(_DEFAULT_THEME)
+
+
+def _accent_css(accent: str) -> str:
+    """seed.json 액센트 → :root(라이트) + [data-theme=dark] 오버라이드 CSS."""
+    a = ACCENTS.get(accent, ACCENTS["green"])
+    return (
+        f":root{{--seed:{a[0]};--seed-d:{a[1]};--seed-l:{a[2]}}}"
+        f'[data-theme="dark"]{{--seed:{a[3]};--seed-d:{a[4]};--seed-l:{a[5]}}}'
+    )
+
+
+def _theme_init_js(default_mode: str) -> str:
+    """플래시 없이 초기 data-theme 설정 (localStorage 우선, 없으면 seed.json mode)."""
+    dm = "dark" if default_mode == "dark" else "light"
+    return (
+        "<script>(function(){var d='" + dm + "';"
+        "try{var s=localStorage.getItem('seed-theme');if(s)d=s;}catch(e){}"
+        "if(d==='dark')document.documentElement.dataset.theme='dark';})();</script>"
+    )
+
 # ---------------------------------------------------------------- inline
 _CODE = re.compile(r"`([^`]+)`")
 _BOLD = re.compile(r"\*\*([^*]+)\*\*")
@@ -123,11 +167,13 @@ def _theme() -> str:
 
 def _page(title: str, body: str, subtitle: str = "") -> str:
     sub = f'<p class="sub">{html.escape(subtitle)}</p>' if subtitle else ""
+    tc = _theme_cfg()
     return f"""<!DOCTYPE html>
 <html lang="ko"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{html.escape(title)}</title>
-<style>{_theme()}</style></head>
+<style>{_theme()}</style><style>{_accent_css(tc["accent"])}</style>
+{_theme_init_js(tc["mode"])}</head>
 <body><div class="wrap">
 <header class="doc-head"><h1>{html.escape(title)}</h1>{sub}</header>
 <main class="doc">{body}</main>
@@ -147,6 +193,17 @@ _PRIO = {1: ("높음", "p-hi"), 2: ("보통", "p-mid"), 3: ("낮음", "p-lo")}
 DASH_JS = """
 <script>
 (function(){
+  // 테마 토글 (라이트↔다크, localStorage 저장)
+  var tt=document.getElementById('tt'), root=document.documentElement;
+  function syncTt(){ if(tt) tt.textContent=(root.dataset.theme==='dark')?'☀️':'🌙'; }
+  syncTt();
+  if(tt) tt.addEventListener('click',function(){
+    var dark=root.dataset.theme==='dark';
+    if(dark) delete root.dataset.theme; else root.dataset.theme='dark';
+    try{ localStorage.setItem('seed-theme', dark?'light':'dark'); }catch(e){}
+    syncTt();
+  });
+
   var q=document.getElementById('q'), state='all';
   function vis(){
     var term=(q.value||'').trim().toLowerCase();
@@ -216,8 +273,11 @@ def build_dashboard(db_path: Path, out_path: Path) -> None:
     ).fetchall()
     con.close()
 
+    doing_n = sum(1 for t in tasks if t["status"] == "doing")
     open_n = sum(1 for t in tasks if t["status"] in ("todo", "doing"))
     done_n = sum(1 for t in tasks if t["status"] == "done")
+    total_n = len(tasks)
+    pct = round(done_n * 100 / total_n) if total_n else 0
 
     def esc(x):
         return html.escape(str(x or ""), quote=True)
@@ -225,14 +285,16 @@ def build_dashboard(db_path: Path, out_path: Path) -> None:
     def trow(t):
         st = t["status"]
         plabel, pcls = _PRIO.get(t["priority"], ("보통", "p-mid"))
-        text = f'{t["title"]} {t["domain"] or ""} {_STATUS_KO.get(st, st)}'
+        dom = t["domain"] or ""
+        domcell = f'<span class="dtag">{esc(dom)}</span>' if dom else ""
+        text = f'{t["title"]} {dom} {_STATUS_KO.get(st, st)}'
         return (
             f'<tr data-status="{esc(st)}" data-text="{esc(text)}">'
             f'<td class="id" data-v="{t["id"]}">#{t["id"]:03d}</td>'
             f'<td class="ttl">{esc(t["title"])}</td>'
             f'<td><span class="badge b-{esc(st)}">{esc(_STATUS_KO.get(st, st))}</span></td>'
             f'<td data-v="{t["priority"] or 2}"><span class="prio {pcls}">{plabel}</span></td>'
-            f'<td class="dim">{esc(t["domain"])}</td>'
+            f'<td data-v="{esc(dom)}">{domcell}</td>'
             f'<td class="dim">{esc((t["created_at"] or "")[:10])}</td></tr>'
         )
 
@@ -253,11 +315,13 @@ def build_dashboard(db_path: Path, out_path: Path) -> None:
 <header class="dash-head">
   <span class="brand">🌱 {esc(_wsname())}</span>
   <h1>대시보드</h1>
+  <button class="ttog" id="tt" title="라이트/다크 전환" aria-label="테마 전환">🌙</button>
   <span class="stamp">최종 빌드 {stamp}</span>
 </header>
 <section class="stats">
-  <div class="stat"><div class="num">{open_n}</div><div class="lab">진행 / 대기</div></div>
-  <div class="stat s-done"><div class="num">{done_n}</div><div class="lab">완료</div></div>
+  <div class="stat"><div class="num">{total_n}</div><div class="lab">전체 업무</div></div>
+  <div class="stat s-doing"><div class="num">{doing_n}</div><div class="lab">진행 중</div></div>
+  <div class="stat s-done"><div class="num">{done_n}<small>· {pct}%</small></div><div class="lab">완료</div></div>
   <div class="stat s-deliv"><div class="num">{len(delivs)}</div><div class="lab">산출물</div></div>
 </section>
 <div class="toolbar">
@@ -285,11 +349,13 @@ def build_dashboard(db_path: Path, out_path: Path) -> None:
 <footer class="dash-foot">🌱 Seed · 더블클릭으로 열리는 정적 대시보드 (서버 불필요)</footer>
 </div>"""
 
+    tc = _theme_cfg()
     page = f"""<!DOCTYPE html>
 <html lang="ko"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{esc(_wsname())} · 대시보드</title>
-<style>{_theme()}</style></head>
+<style>{_theme()}</style><style>{_accent_css(tc["accent"])}</style>
+{_theme_init_js(tc["mode"])}</head>
 <body>{body}{DASH_JS}</body></html>"""
     Path(out_path).write_text(page, encoding="utf-8")
 

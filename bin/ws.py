@@ -30,7 +30,11 @@ CONFIG = ROOT / "seed.json"
 DELIV = ROOT / "deliverables"
 DASH = DELIV / "_dashboard.html"
 
-DEFAULT_CONFIG = {"name": "My Workspace", "prefix": "WS", "id_pad": 3, "slug_lang": "ko"}
+DEFAULT_CONFIG = {
+    "name": "My Workspace", "prefix": "WS", "id_pad": 3, "slug_lang": "ko",
+    # 대시보드/문서 테마 — accent: green|blue|violet|teal|amber|rose · mode: light|dark
+    "theme": {"accent": "green", "mode": "light"},
+}
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS tasks (

@@ -2,5 +2,9 @@
   "name": "My Workspace",
   "prefix": "WS",
   "id_pad": 3,
-  "slug_lang": "ko"
+  "slug_lang": "ko",
+  "theme": {
+    "accent": "green",
+    "mode": "light"
+  }
 }

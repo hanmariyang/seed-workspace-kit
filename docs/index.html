@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌱 Seed — 인터뷰 한 번으로 자라는 Claude Code 워크스페이스</title>
+<meta name="description" content="복사가 아니라 인터뷰. Seed는 당신에게 6~8개를 묻고, 그 답으로 당신 업무에 맞는 Claude Code 워크스페이스를 만들어 냅니다. 의존성 0.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="🌱 Seed — 인터뷰 한 번으로 자라는 Claude Code 워크스페이스">
+<meta property="og:description" content="복사가 아니라 인터뷰. 당신에게 6~8개를 묻고, 그 답으로 당신 업무에 맞는 워크스페이스를 지어 냅니다. 의존성 0.">
+<meta property="og:url" content="https://hanmariyang.github.io/seed-workspace-kit/">
+<meta property="og:image" content="https://hanmariyang.github.io/seed-workspace-kit/img/og.png">
+<meta property="og:image:width" content="1280">
+<meta property="og:image:height" content="640">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="🌱 Seed — 인터뷰 한 번으로 자라는 Claude Code 워크스페이스">
+<meta name="twitter:description" content="복사가 아니라 인터뷰. 그 답으로 당신 업무에 맞는 워크스페이스를 지어 냅니다. 의존성 0.">
+<meta name="twitter:image" content="https://hanmariyang.github.io/seed-workspace-kit/img/og.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2327a456'/%3E%3Cpath d='M16 26 V15.5' stroke='%23fff' stroke-width='2.6' stroke-linecap='round'/%3E%3Cpath d='M15.5 17.5 C10 17.8 6.6 14.6 6.4 9.6 C12 9.3 15.3 12.5 15.5 17.5 Z' fill='%23d7f4e1'/%3E%3Cpath d='M16.5 15.5 C21.4 14 24 10.2 23.2 5.6 C18.4 7 15.7 10.9 16.5 15.5 Z' fill='%23fff'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#f7f9f7; --ink:#19211c; --muted:#69786d; --faint:#94a397;
+  --line:#e6ece6; --line-2:#eef2ee; --card:#fff;
+  --seed:#27a456; --seed-d:#1c8345; --seed-l:#e7f6ec; --soft:#f1f6f2;
+  --blue:#2f74c0; --blue-l:#e9f1fb; --amber:#d97a28; --amber-l:#fbeede; --violet:#7c5cd6;
+  --shadow:0 1px 2px rgba(20,40,25,.04), 0 12px 34px rgba(20,40,25,.07);
+  --shadow-lg:0 10px 24px rgba(20,40,25,.1), 0 30px 60px rgba(20,40,25,.12);
+  --r:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{background:var(--bg);color:var(--ink);line-height:1.65;
+  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Segoe UI",sans-serif;}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+
+/* nav */
+nav{position:sticky;top:0;z-index:40;backdrop-filter:saturate(1.4) blur(10px);
+  background:rgba(247,249,247,.82);border-bottom:1px solid var(--line)}
+nav .in{max-width:1080px;margin:0 auto;padding:12px 22px;display:flex;align-items:center;gap:18px}
+nav .logo{display:flex;align-items:center;gap:8px;font-weight:850;font-size:17px;letter-spacing:-.4px}
+nav .logo .m{width:26px;height:26px;border-radius:7px;background:var(--seed);display:grid;place-items:center}
+nav .sp{margin-left:auto;display:flex;gap:6px;align-items:center}
+nav a.link{color:var(--muted);font-size:14px;font-weight:600;padding:8px 12px;border-radius:9px}
+nav a.link:hover{color:var(--seed-d);background:var(--seed-l)}
+.btn{display:inline-flex;align-items:center;gap:7px;font-weight:700;font-size:14px;padding:10px 16px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);transition:all .14s;cursor:pointer}
+.btn:hover{border-color:var(--seed);color:var(--seed-d)}
+.btn.pri{background:var(--seed);border-color:var(--seed);color:#fff}
+.btn.pri:hover{background:var(--seed-d);color:#fff}
+
+/* hero */
+.hero{position:relative;overflow:hidden;padding:70px 0 40px;
+  background:radial-gradient(1200px 560px at 15% -10%,rgba(39,164,86,.12),transparent 60%),
+             radial-gradient(1000px 500px at 100% 0%,rgba(47,116,192,.08),transparent 55%)}
+.hero .seedmark{font-size:52px;filter:drop-shadow(0 6px 16px rgba(39,164,86,.3))}
+.hero h1{font-size:clamp(38px,6vw,68px);font-weight:850;letter-spacing:-2.5px;line-height:1.05;margin:14px 0 0}
+.hero h1 .g{background:linear-gradient(180deg,#2c8f4e,#27a456);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero .tag{font-size:clamp(17px,2.4vw,22px);color:var(--seed-d);font-weight:700;margin-top:16px}
+.hero .sub{font-size:16px;color:var(--muted);margin-top:10px;max-width:620px}
+.hero .cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+.hero .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}
+.chip{font-size:12.5px;font-weight:700;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--soft);color:var(--seed-d)}
+/* hero shot */
+.heroshot{margin-top:40px;position:relative}
+.heroshot .frame{border-radius:var(--r);border:1px solid var(--line);box-shadow:var(--shadow-lg);overflow:hidden;background:var(--card)}
+.heroshot .pair{display:grid;grid-template-columns:1.35fr .85fr;gap:0}
+.heroshot .pair .frame{border-radius:0}
+.heroshot .pair img{height:600px;object-fit:cover;object-position:top}
+.heroshot .pair .frame:first-child{border-radius:var(--r) 0 0 var(--r);border-right:none}
+.heroshot .pair .frame:last-child{border-radius:0 var(--r) var(--r) 0}
+.heroshot figcaption{position:absolute;bottom:12px;left:16px;font-size:11.5px;font-weight:700;color:#fff;background:rgba(20,40,25,.55);padding:4px 10px;border-radius:999px}
+
+/* sections */
+section{padding:64px 0}
+.eyebrow{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--seed-d);font-weight:800}
+.h2{font-size:clamp(26px,4vw,40px);font-weight:850;letter-spacing:-1.2px;margin:10px 0 0;line-height:1.12}
+.lead{font-size:16px;color:var(--muted);margin-top:14px;max-width:680px}
+
+/* ===== 인터뷰 (centerpiece) ===== */
+.interview{background:linear-gradient(180deg,#fff,#f4f8f4);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.qa{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:22px;max-width:560px}
+.qa .head{display:flex;align-items:center;gap:9px;padding-bottom:14px;margin-bottom:8px;border-bottom:1px solid var(--line-2)}
+.qa .head .m{width:26px;height:26px;border-radius:7px;background:var(--seed);display:grid;place-items:center;font-size:14px}
+.qa .head b{font-size:14px} .qa .head span{font-size:12px;color:var(--faint);margin-left:auto}
+.bub{display:flex;gap:9px;margin:12px 0;align-items:flex-start}
+.bub .av{flex:0 0 26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:13px;background:var(--seed-l)}
+.bub.me{flex-direction:row-reverse}
+.bub .txt{font-size:14px;padding:9px 13px;border-radius:13px;max-width:78%}
+.bub.ai .txt{background:var(--soft);border-top-left-radius:4px}
+.bub.me .av{background:var(--blue-l)}
+.bub.me .txt{background:var(--seed);color:#fff;border-top-right-radius:4px;font-weight:600}
+.transform{display:grid;grid-template-columns:1fr 54px 1fr;gap:0;align-items:center;margin-top:34px}
+@media(max-width:820px){.transform{grid-template-columns:1fr;gap:16px}.transform .arrow{transform:rotate(90deg)}}
+.arrow{display:grid;place-items:center;font-size:30px;color:var(--seed);font-weight:800}
+.panel{border-radius:16px;border:1px solid var(--line);padding:20px;background:#fff}
+.panel.before{background:linear-gradient(160deg,#faf7f2,#fff);border-color:#eadfce}
+.panel.after{background:linear-gradient(160deg,var(--seed-l),#fff);border-color:#bfe0c9}
+.panel .plab{font-size:12px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px}
+.panel.before .plab{color:var(--amber)} .panel.after .plab{color:var(--seed-d)}
+.codeblk{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:12.5px;line-height:1.7;
+  background:#0e140f;color:#cfe0cd;border-radius:11px;padding:15px 16px;overflow:auto}
+.codeblk .ph{color:#e6a35a;background:rgba(230,163,90,.13);border-radius:4px;padding:0 3px}
+.codeblk .fill{color:#7fe39b;font-weight:700}
+.codeblk .c{color:#6f836d}
+.grew{display:flex;flex-direction:column;gap:9px}
+.grew .it{display:flex;gap:9px;align-items:center;font-size:13.5px}
+.grew .it .k{width:24px;height:24px;border-radius:7px;background:var(--seed-l);display:grid;place-items:center;font-size:13px;flex:0 0 auto}
+.grew .it b{font-weight:700} .grew .it .d{color:var(--muted)}
+.punch{text-align:center;font-size:clamp(18px,2.6vw,24px);font-weight:800;letter-spacing:-.6px;margin-top:38px}
+.punch .u{background:linear-gradient(transparent 62%,var(--seed-l) 0)}
+
+/* ===== 결과물 / 카탈로그 gallery ===== */
+.shots{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:28px}
+.shot{border-radius:14px;border:1px solid var(--line);box-shadow:var(--shadow);overflow:hidden;background:var(--card);position:relative}
+.shot img{width:100%;height:230px;object-fit:cover;object-position:top}
+.shot .cap{padding:11px 14px;font-size:13px;color:var(--muted);border-top:1px solid var(--line-2)}
+.shot .cap b{color:var(--ink)}
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:24px}
+@media(max-width:820px){.shots,.gallery{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.shots,.gallery{grid-template-columns:1fr}}
+.gcard{border-radius:13px;border:1px solid var(--line);box-shadow:var(--shadow);overflow:hidden;background:var(--card);transition:transform .14s,box-shadow .14s}
+.gcard:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+.gcard img{width:100%;height:150px;object-fit:cover;object-position:top}
+.gcard .cap{padding:10px 13px;font-size:12.5px;font-weight:700}
+.gcard .cap span{display:block;font-weight:500;color:var(--muted);font-size:11.5px;margin-top:2px}
+.catbig{margin-top:26px;border-radius:var(--r);border:1px solid var(--line);box-shadow:var(--shadow-lg);overflow:hidden}
+.catbig img{width:100%}
+
+/* 테마 스와치 */
+.themebar{display:flex;gap:26px;flex-wrap:wrap;align-items:flex-end;margin-top:22px}
+.sw{display:flex;gap:8px}
+.sw i{width:34px;height:34px;border-radius:9px;display:block;border:1px solid rgba(0,0,0,.06)}
+.slab{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:9px}
+
+/* 원칙 */
+.prin{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:26px}
+@media(max-width:820px){.prin{grid-template-columns:1fr 1fr}}
+.p{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:var(--shadow)}
+.p .n{font-size:24px;font-weight:850;color:var(--seed);opacity:.5}
+.p h4{font-size:15px;margin:8px 0 5px} .p p{font-size:12.5px;color:var(--muted)}
+
+/* start */
+.start .box{background:#0e140f;border-radius:var(--r);padding:26px;margin-top:24px;box-shadow:var(--shadow-lg)}
+.start pre{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:14px;line-height:1.9;color:#cfe0cd;overflow:auto}
+.start .p2{color:#7fe39b;font-weight:700} .start .c{color:#6f836d}
+
+footer{border-top:1px solid var(--line);padding:40px 0;text-align:center;color:var(--muted);font-size:13px}
+footer .lk{display:flex;gap:16px;justify-content:center;margin-bottom:14px;flex-wrap:wrap}
+footer a{color:var(--seed-d);font-weight:600}
+</style></head>
+<body>
+
+<nav><div class="in">
+  <a class="logo" href="#top"><span class="m"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 26 V15.5' stroke='%23fff' stroke-width='2.6' stroke-linecap='round'/%3E%3Cpath d='M15.5 17.5 C10 17.8 6.6 14.6 6.4 9.6 C12 9.3 15.3 12.5 15.5 17.5 Z' fill='%23d7f4e1'/%3E%3Cpath d='M16.5 15.5 C21.4 14 24 10.2 23.2 5.6 C18.4 7 15.7 10.9 16.5 15.5 Z' fill='%23fff'/%3E%3C/svg%3E" width="16"></span>Seed</a>
+  <div class="sp">
+    <a class="link" href="#interview">인터뷰</a>
+    <a class="link" href="#catalog">카탈로그</a>
+    <a class="link" href="poster.html">포스터</a>
+    <a class="btn" href="https://github.com/hanmariyang/seed-workspace-kit">GitHub</a>
+    <a class="btn pri" href="https://github.com/hanmariyang/seed-workspace-kit/generate">Use this template</a>
+  </div>
+</div></nav>
+
+<header class="hero" id="top"><div class="wrap">
+  <div class="seedmark">🌱</div>
+  <h1>인터뷰 한 번으로,<br><span class="g">당신의 워크스페이스</span>가 자란다</h1>
+  <p class="tag">Plant once. Grow your own Claude Code workspace.</p>
+  <p class="sub">빈 폴더도, 남의 설정을 복붙한 폴더도 아닙니다. Seed는 당신에게 <b>6~8개를 묻고</b>, 그 답으로 디렉토리·로컬 DB·전용 조력 에이전트·산출물 대시보드를 <b>당신에게 맞춰</b> 지어 냅니다. 의존성 0.</p>
+  <div class="cta">
+    <a class="btn pri" href="https://github.com/hanmariyang/seed-workspace-kit/generate">🌱 이 템플릿으로 시작</a>
+    <a class="btn" href="#interview">인터뷰가 뭐가 다른데? ↓</a>
+    <a class="btn" href="dashboard-catalog/index.html">대시보드 카탈로그</a>
+  </div>
+  <div class="chips">
+    <span class="chip">의존성 0 · SQLite 1파일</span>
+    <span class="chip">md + html 산출물</span>
+    <span class="chip">라이트/다크 · 테마 커스텀</span>
+    <span class="chip">더블클릭으로 열림</span>
+    <span class="chip">원탁 × Karpathy</span>
+  </div>
+
+  <figure class="heroshot">
+    <div class="pair">
+      <div class="frame"><img src="img/lp/dash-light.png" alt="Seed 대시보드 (라이트)"></div>
+      <div class="frame"><img src="img/lp/dash-dark.png" alt="Seed 대시보드 (다크)"></div>
+    </div>
+    <figcaption>저장하면 다시 그려지는 정적 대시보드 · 라이트/다크</figcaption>
+  </figure>
+</div></header>
+
+<!-- ===== 인터뷰 centerpiece ===== -->
+<section class="interview" id="interview"><div class="wrap">
+  <div class="eyebrow">복사가 아니라 인터뷰</div>
+  <h2 class="h2">인터뷰를 하면 뭐가 달라지는데?</h2>
+  <p class="lead">남의 워크스페이스를 통째로 복사하면 내 업무와 안 맞아 결국 방치됩니다.
+  Seed는 <b>당신을 인터뷰</b>합니다. 같은 질문에 당신이 답하면, 그 답이 그대로 <b>구조·조력자·규약</b>이 됩니다.</p>
+
+  <div class="qa" style="margin-top:30px">
+    <div class="head"><span class="m">🌱</span><b>Seed 온보딩 인터뷰</b><span>/onboard · 6~8문항</span></div>
+    <div class="bub ai"><span class="av">🌱</span><div class="txt">어떤 일을 하세요?</div></div>
+    <div class="bub me"><span class="av">🧑</span><div class="txt">KDT 교육 운영이요</div></div>
+    <div class="bub ai"><span class="av">🌱</span><div class="txt">주로 어떤 결과물을 만드나요?</div></div>
+    <div class="bub me"><span class="av">🧑</span><div class="txt">운영 보고서 · 회의록 · 리서치 노트</div></div>
+    <div class="bub ai"><span class="av">🌱</span><div class="txt">곁에 어떤 조력자가 있으면 좋겠어요?</div></div>
+    <div class="bub me"><span class="av">🧑</span><div class="txt">정리 잘하는 기록가, 빠른 실행가</div></div>
+  </div>
+
+  <div class="transform">
+    <div class="panel before">
+      <div class="plab">복사한 템플릿 — 빈칸투성이</div>
+      <div class="codeblk"># <span class="ph">{{WORKSPACE_NAME}}</span>
+<span class="c">## 정체성</span>
+- 주인: <span class="ph">{{OWNER}}</span>
+- 직무: <span class="ph">{{ROLE}}</span>
+- 도메인: <span class="ph">{{DOMAINS}}</span>
+- 조력자: <span class="ph">{{ASSISTANTS}}</span></div>
+      <p style="font-size:12.5px;color:var(--muted);margin-top:12px">남의 설정 그대로. 내 일과 안 맞아 손이 안 감.</p>
+    </div>
+    <div class="arrow">→</div>
+    <div class="panel after">
+      <div class="plab">인터뷰로 자란 것 — 당신 이야기로 채워짐</div>
+      <div class="codeblk"># <span class="fill">민서의 워크스페이스</span>
+<span class="c">## 정체성</span>
+- 주인: <span class="fill">민서</span>
+- 직무: <span class="fill">KDT 교육 운영</span>
+- 도메인: <span class="fill">기획·운영·리서치·콘텐츠</span>
+- 조력자: <span class="fill">기록가 · 실행가</span></div>
+      <div class="grew" style="margin-top:14px">
+        <div class="it"><span class="k">🤖</span><div><b>기록가·실행가</b> <span class="d">— 인터뷰가 낳은 전용 에이전트</span></div></div>
+        <div class="it"><span class="k">🗂️</span><div><b>기획·운영·리서치·콘텐츠</b> <span class="d">도메인 구조 + 명명 규약</span></div></div>
+        <div class="it"><span class="k">📊</span><div><b>첫 산출물 + 대시보드</b> <span class="d">즉석에서 만들어 띄워 줌</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <p class="punch">빈 템플릿이 아니라, <span class="u">이미 한 번 돌아간 워크스페이스</span>를 건네받습니다.</p>
+</div></section>
+
+<!-- ===== 결과물 ===== -->
+<section id="result"><div class="wrap">
+  <div class="eyebrow">그래서 무엇이 생기나</div>
+  <h2 class="h2">저장하면, 대시보드가 다시 그려진다</h2>
+  <p class="lead">모든 산출물은 <b>소스(.md) + 렌더(.html)</b> 쌍으로 저장되고, 그때마다 대시보드가 자동 재빌드됩니다.
+  서버 없이 <b>더블클릭</b>으로 열리고, 데이터는 HTML에 박혀 있습니다.</p>
+  <div class="shots">
+    <div class="shot"><img src="img/lp/dash-light.png" alt="대시보드 라이트"><div class="cap"><b>기본 대시보드</b> — 통계·검색·필터·정렬 (라이트)</div></div>
+    <div class="shot"><img src="img/lp/dash-dark.png" alt="대시보드 다크"><div class="cap"><b>라이트/다크 토글</b> — <code>seed.json</code> 테마 한 줄로 색이 바뀜</div></div>
+  </div>
+</div></section>
+
+<!-- ===== 카탈로그 ===== -->
+<section id="catalog" style="background:#f4f8f4;border-top:1px solid var(--line);border-bottom:1px solid var(--line)"><div class="wrap">
+  <div class="eyebrow">같은 데이터, 열 가지 시선</div>
+  <h2 class="h2">대시보드 카탈로그</h2>
+  <p class="lead">기본형이 마음에 안 들면, <b>10가지 컨셉</b> 중 골라 채택하세요. 전부 같은 데모 데이터로 구웠고, 의존성 0 · 더블클릭으로 열립니다.</p>
+  <div class="gallery">
+    <a class="gcard" href="dashboard-catalog/02-workspace-views.html"><img src="img/lp/c-views.png" alt="Workspace Views"><div class="cap">Workspace Views<span>표·보드·갤러리·타임라인 전환</span></div></a>
+    <a class="gcard" href="dashboard-catalog/06-insight-deck.html"><img src="img/lp/c-insight.png" alt="Insight Deck"><div class="cap">Insight Deck<span>도넛·막대·추이·히트맵</span></div></a>
+    <a class="gcard" href="dashboard-catalog/04-kanban-flow.html"><img src="img/lp/c-kanban.png" alt="Kanban Flow"><div class="cap">Kanban Flow<span>WIP·마감·스윔레인</span></div></a>
+    <a class="gcard" href="dashboard-catalog/03-today-plan.html"><img src="img/lp/c-today.png" alt="Today Plan"><div class="cap">Today Plan<span>차분한 데일리 플래너</span></div></a>
+    <a class="gcard" href="dashboard-catalog/07-roadmap-timeline.html"><img src="img/lp/c-roadmap.png" alt="Roadmap Timeline"><div class="cap">Roadmap Timeline<span>간트 · 마일스톤</span></div></a>
+    <a class="gcard" href="dashboard-catalog/10-review-studio.html"><img src="img/lp/c-review.png" alt="Review Studio"><div class="cap">Review Studio<span>인라인 주석 · 승인 · .md export</span></div></a>
+  </div>
+  <a class="catbig" href="dashboard-catalog/index.html"><img src="img/lp/catalog.png" alt="대시보드 카탈로그 10종 전체"></a>
+  <div style="text-align:center;margin-top:20px"><a class="btn pri" href="dashboard-catalog/index.html">카탈로그 10종 전체 보기 →</a></div>
+</div></div></section>
+
+<!-- ===== 테마 ===== -->
+<section id="theme"><div class="wrap">
+  <div class="eyebrow">골라 쓰고, 물들인다</div>
+  <h2 class="h2">테마도 당신 색으로</h2>
+  <p class="lead"><code>seed.json</code>의 <code>theme: {accent, mode}</code> 한 줄로 워크스페이스 전체가 물듭니다. 대시보드 우상단 🌙 버튼으로 라이트/다크 즉시 전환(브라우저 기억).</p>
+  <div class="themebar">
+    <div><div class="slab">라이트 · 다크</div><div class="sw"><i style="background:#f7f9f7;border-color:#e6ece6"></i><i style="background:#0e140f"></i></div></div>
+    <div><div class="slab">액센트 6종</div><div class="sw"><i style="background:#27a456"></i><i style="background:#2f7fe0"></i><i style="background:#7c5cd6"></i><i style="background:#0e9e8e"></i><i style="background:#d9820a"></i><i style="background:#d6455c"></i></div></div>
+  </div>
+</div></section>
+
+<!-- ===== 철학 ===== -->
+<section style="background:#f4f8f4;border-top:1px solid var(--line);border-bottom:1px solid var(--line)"><div class="wrap">
+  <div class="eyebrow">작게 유지되는 이유</div>
+  <h2 class="h2">상태는 DB, 지식은 플랫 마크다운</h2>
+  <p class="lead">변하는 구조화 데이터(업무·산출물 메타)는 <code>workspace.db</code>(SQLite)에. 쌓이는 텍스트 지식은 <code>wiki/*.md</code> 평문에. 평문은 실패 모드가 없고, 띄울 서비스가 없고, git으로 버전되고, 어떤 LLM이든 그냥 읽습니다.</p>
+  <div class="prin">
+    <div class="p"><div class="n">01</div><h4>의존성 0 진입</h4><p>표준 라이브러리만. <code>pip install</code> 없이 시작.</p></div>
+    <div class="p"><div class="n">02</div><h4>소스 + 렌더 동시</h4><p>모든 산출물 .md + .html 쌍으로.</p></div>
+    <div class="p"><div class="n">03</div><h4>최소 골격</h4><p>조력자 1~2명, 스킬 3개. 필요해지면 자란다.</p></div>
+    <div class="p"><div class="n">04</div><h4>승격 경로만</h4><p>SQLite→PG, 정적→서버. 안내만, 강제 X.</p></div>
+  </div>
+</div></section>
+
+<!-- ===== 시작 ===== -->
+<section class="start"><div class="wrap">
+  <div class="eyebrow">2분이면 됩니다</div>
+  <h2 class="h2">빠른 시작</h2>
+  <div class="box"><pre><span class="c"># 1) Seed 템플릿으로 새 워크스페이스 repo 생성</span>
+gh repo create my-workspace --template hanmariyang/seed-workspace-kit --private --clone
+cd my-workspace
+
+<span class="c"># 2) Claude Code 에서 온보딩 — 인터뷰가 시작됩니다</span>
+<span class="p2">/onboard</span>
+
+<span class="c"># 3) 끝나면 대시보드가 뜹니다. 이후엔:</span>
+<span class="p2">/task</span>    "이번 주 할 일 등록"
+<span class="p2">/deliver</span> "3분기 보고서 초안"
+<span class="p2">/view</span>    <span class="c"># 대시보드 열기</span></pre></div>
+  <div style="text-align:center;margin-top:24px">
+    <a class="btn pri" href="https://github.com/hanmariyang/seed-workspace-kit/generate">🌱 이 템플릿으로 시작</a>
+    <a class="btn" href="https://github.com/hanmariyang/seed-workspace-kit">GitHub 저장소</a>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <div class="lk">
+    <a href="https://github.com/hanmariyang/seed-workspace-kit">GitHub</a>
+    <a href="dashboard-catalog/index.html">대시보드 카탈로그</a>
+    <a href="poster.html">프로젝트 포스터</a>
+    <a href="DESIGN.md">설계 문서</a>
+  </div>
+  🌱 <b>Seed</b> — 인터뷰로 심고, 워크스페이스로 키운다. · MIT License
+</div></footer>
+
+</body></html>

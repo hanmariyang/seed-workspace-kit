@@ -6,10 +6,13 @@
 
 *Plant once. Grow your own workspace.*
 
+[![site](https://img.shields.io/badge/🌱_landing-live-27a456?style=flat-square)](https://hanmariyang.github.io/seed-workspace-kit/)
 [![template](https://img.shields.io/badge/use_this-template-27a456?style=flat-square)](https://github.com/hanmariyang/seed-workspace-kit/generate)
 [![CI](https://github.com/hanmariyang/seed-workspace-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/hanmariyang/seed-workspace-kit/actions/workflows/ci.yml)
 [![deps](https://img.shields.io/badge/dependencies-0-1c8345?style=flat-square)](#4대-원칙)
 [![license](https://img.shields.io/badge/license-MIT-69786d?style=flat-square)](LICENSE)
+
+**🌐 랜딩 페이지 → [hanmariyang.github.io/seed-workspace-kit](https://hanmariyang.github.io/seed-workspace-kit/)**
 
 </div>
 

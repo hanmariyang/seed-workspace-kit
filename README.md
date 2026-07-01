@@ -7,6 +7,7 @@
 *Plant once. Grow your own workspace.*
 
 [![template](https://img.shields.io/badge/use_this-template-27a456?style=flat-square)](https://github.com/hanmariyang/seed-workspace-kit/generate)
+[![CI](https://github.com/hanmariyang/seed-workspace-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/hanmariyang/seed-workspace-kit/actions/workflows/ci.yml)
 [![deps](https://img.shields.io/badge/dependencies-0-1c8345?style=flat-square)](#4대-원칙)
 [![license](https://img.shields.io/badge/license-MIT-69786d?style=flat-square)](LICENSE)
 
@@ -20,7 +21,7 @@
 
 ![대시보드](docs/img/dashboard.png)
 
-> 검색 · 상태 필터 · 컬럼 정렬이 들어간 정적 대시보드. 데이터가 HTML에 박혀 있어 `file://` 더블클릭만으로 동작 (서버 불필요).
+> 통계(전체·진행·완료율·산출물) · 검색 · 상태 필터 · 컬럼 정렬 · 라이트/다크 토글이 들어간 정적 대시보드. 데이터가 HTML에 박혀 있어 `file://` 더블클릭만으로 동작 (서버 불필요). 액센트 색·기본 모드는 `seed.json` 의 `theme` 한 줄로 바뀝니다.
 
 | 산출물 문서 (md→html) | 라이브 데모 |
 |---|---|
@@ -171,6 +172,20 @@ open deliverables/_dashboard.html
 - 라이선스: [`LICENSE`](LICENSE) (MIT)
 
 자세한 작동 원리는 `PROGRAM.md`, 정체성·규칙은 `CLAUDE.md`.
+
+---
+
+## 기여 & 커뮤니티
+
+Seed 는 **작게 유지되는 것**을 목표로 합니다. 기여를 환영해요 🌱
+
+- 🤝 기여 방법: [`CONTRIBUTING.md`](CONTRIBUTING.md) — 개발 환경·브랜치·PR 규칙, 지켜야 할 4대 원칙
+- 📜 행동 강령: [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) — Contributor Covenant 2.1
+- 🔒 보안 제보: [`SECURITY.md`](SECURITY.md) — 취약점은 공개 이슈 대신 비공개 채널로
+- 🗒️ 변경 이력: [`CHANGELOG.md`](CHANGELOG.md)
+- 💬 질문·아이디어: [Discussions](https://github.com/hanmariyang/seed-workspace-kit/discussions)
+
+기여 전 큰 변경은 **이슈로 먼저 제안**해 방향을 맞춰주세요.
 
 ---
 

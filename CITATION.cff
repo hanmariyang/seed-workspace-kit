@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "이 프로젝트를 인용할 때 아래 메타데이터를 사용해 주세요."
+title: "Seed — Claude Code 워크스페이스 부트스트랩 키트"
+abstract: "인터뷰 한 번으로 자기 업무에 맞는 Claude Code 워크스페이스가 자라는 템플릿 키트. 원탁 × Karpathy 혼합, 의존성 0."
+type: software
+authors:
+  - given-names: gc.yang
+    alias: hanmariyang
+repository-code: "https://github.com/hanmariyang/seed-workspace-kit"
+url: "https://github.com/hanmariyang/seed-workspace-kit"
+license: MIT
+version: 0.1.0
+date-released: 2026-07-01
+keywords:
+  - claude-code
+  - workspace
+  - template
+  - sqlite
+  - productivity

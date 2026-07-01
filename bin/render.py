@@ -18,6 +18,17 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 THEME = ROOT / "deliverables" / "_assets" / "theme.css"
 
+# 인라인 SVG 파비콘 (외부 파일 없이 자기완결 · file:// 더블클릭 대응). 🌱 새싹 마크.
+FAVICON = (
+    "<link rel=\"icon\" href=\"data:image/svg+xml,"
+    "%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E"
+    "%3Crect width='32' height='32' rx='8' fill='%2327a456'/%3E"
+    "%3Cpath d='M16 26 V15.5' stroke='%23fff' stroke-width='2.6' stroke-linecap='round'/%3E"
+    "%3Cpath d='M15.5 17.5 C10 17.8 6.6 14.6 6.4 9.6 C12 9.3 15.3 12.5 15.5 17.5 Z' fill='%23d7f4e1'/%3E"
+    "%3Cpath d='M16.5 15.5 C21.4 14 24 10.2 23.2 5.6 C18.4 7 15.7 10.9 16.5 15.5 Z' fill='%23fff'/%3E"
+    "%3C/svg%3E\">"
+)
+
 # ---------------------------------------------------------------- 테마 커스텀
 # seed.json 의 theme.accent / theme.mode 로 대시보드·문서 색을 바꾼다.
 # 각 액센트 = (라이트: seed, seed-d, seed-l | 다크: seed, seed-d, seed-l)
@@ -172,6 +183,7 @@ def _page(title: str, body: str, subtitle: str = "") -> str:
 <html lang="ko"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{html.escape(title)}</title>
+{FAVICON}
 <style>{_theme()}</style><style>{_accent_css(tc["accent"])}</style>
 {_theme_init_js(tc["mode"])}</head>
 <body><div class="wrap">
@@ -354,6 +366,7 @@ def build_dashboard(db_path: Path, out_path: Path) -> None:
 <html lang="ko"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{esc(_wsname())} · 대시보드</title>
+{FAVICON}
 <style>{_theme()}</style><style>{_accent_css(tc["accent"])}</style>
 {_theme_init_js(tc["mode"])}</head>
 <body>{body}{DASH_JS}</body></html>"""

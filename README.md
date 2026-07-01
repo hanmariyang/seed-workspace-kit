@@ -152,6 +152,10 @@ python3 bin/ws.py deliver "첫 산출물"
 python3 bin/ws.py view                        # 대시보드 열기 (mac·linux·windows 자동)
 ```
 
+![온보딩 해피패스](docs/img/onboard.gif)
+
+> 위 네 명령이 흐르면 — 업무가 등록되고, 산출물(md+html)이 생기고, 대시보드가 다시 그려져 브라우저에 뜹니다.
+
 ---
 
 ## 로드맵

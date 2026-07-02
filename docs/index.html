@@ -156,6 +156,18 @@ section{padding:64px 0}
 .start pre{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:14px;line-height:1.9;color:#cfe0cd;overflow:auto}
 .start .p2{color:#7fe39b;font-weight:700} .start .c{color:#6f836d}
 
+/* 활용 사례 */
+.casecard{display:block;margin-top:26px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;text-decoration:none;color:inherit;transition:transform .14s,box-shadow .14s,border-color .14s;max-width:720px}
+.casecard:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);border-color:var(--seed)}
+.casecard .cframe{background:#0e140f;overflow:hidden;border-bottom:1px solid var(--line)}
+.casecard .cframe img{width:100%;height:auto;display:block}
+.casecard .cbody{padding:20px 24px;display:flex;flex-direction:column}
+.casecard .cbadge{display:inline-block;align-self:flex-start;font-size:11.5px;font-weight:800;color:var(--seed-d);background:var(--seed-l);border:1px solid #bfe0c9;padding:3px 10px;border-radius:999px;margin-bottom:12px}
+.casecard h3{font-size:20px;font-weight:800;letter-spacing:-.4px;margin-bottom:8px}
+.casecard .cbody p{font-size:13.5px;color:var(--muted);margin-bottom:14px}
+.casecard .clink{font-size:14px;font-weight:700;color:var(--seed-d)}
+.casemore{margin-top:16px;font-size:13px;color:var(--muted);text-align:center}
+.casemore a{color:var(--seed-d);font-weight:700;text-decoration:none;border-bottom:1px solid #bfe0c9}
 footer{border-top:1px solid var(--line);padding:40px 0;text-align:center;color:var(--muted);font-size:13px}
 footer .lk{display:flex;gap:16px;justify-content:center;margin-bottom:14px;flex-wrap:wrap}
 footer a{color:var(--seed-d);font-weight:600}
@@ -314,6 +326,23 @@ footer a{color:var(--seed-d);font-weight:600}
     <div class="p"><div class="n">03</div><h4>최소 골격</h4><p>조력자 1~2명, 스킬 3개. 필요해지면 자란다.</p></div>
     <div class="p"><div class="n">04</div><h4>승격 경로만</h4><p>SQLite→PG, 정적→서버. 안내만, 강제 X.</p></div>
   </div>
+</div></section>
+
+<!-- ===== 활용 사례 ===== -->
+<section id="cases" style="background:#f4f8f4;border-top:1px solid var(--line);border-bottom:1px solid var(--line)"><div class="wrap">
+  <div class="eyebrow">실제 활용 사례 · Made with Seed</div>
+  <h2 class="h2">동료들이 이미 이렇게 씁니다</h2>
+  <p class="lead">Seed로 자기 업무 공간을 꾸리고, 그 안에서 실제 결과물을 만들어 냅니다.</p>
+  <a class="casecard" href="https://jinyoung-sparta.github.io/studio-guide/" target="_blank" rel="noopener">
+    <div class="cframe"><img src="img/case-studio-guide.png" alt="스튜디오 촬영 가이드 — 진영님이 Seed로 제작"></div>
+    <div class="cbody">
+      <div class="cbadge">🌱 Made with Seed</div>
+      <h3>스튜디오 촬영 가이드</h3>
+      <p><b>진영님</b> · 튜터가 촬영 전 <b>4가지만 답하면 끝</b>나는 체크 가이드. 채팅형 인터랙션으로 만들었어요.</p>
+      <span class="clink">사례 열어보기 →</span>
+    </div>
+  </a>
+  <p class="casemore">당신이 Seed로 만든 것도 보여주세요 — <a href="https://github.com/hanmariyang/seed-workspace-kit/discussions" target="_blank" rel="noopener">Discussions</a>에 공유해 주시면 여기 실립니다.</p>
 </div></section>
 
 <!-- ===== 시작 ===== -->

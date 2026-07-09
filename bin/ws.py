@@ -9,6 +9,8 @@
   start <id>                                       업무 진행중(doing)
   note ["메모"] [--tag T]                           빠른 메모 기록 · 인자 없으면 최근 목록
   decide ["결정"] [--why 이유] [--task ID]          결정 기록 · 인자 없으면 최근 목록
+  promote <note_id> [--topic S] [--title T]        메모를 wiki/*.md 지식으로 승격 (DB→md 단방향)
+  search "검색어" [--limit N]                        업무·메모·결정·산출물·wiki 통합 검색
   deliver "제목" [--task ID] [--from FILE] [--slug S]   산출물 생성 (md+html+DB) + 대시보드 재빌드
   build                                            대시보드만 재빌드
   view                                             대시보드를 기본 브라우저로 열기 (mac/linux/win 자동)
@@ -33,6 +35,7 @@ DB = ROOT / "workspace.db"
 CONFIG = ROOT / "seed.json"
 DELIV = ROOT / "deliverables"
 DASH = DELIV / "_dashboard.html"
+WIKI = ROOT / "wiki"
 
 DEFAULT_CONFIG = {
     "name": "My Workspace", "prefix": "WS", "id_pad": 3, "slug_lang": "ko",
@@ -234,6 +237,100 @@ def cmd_decide(a):
     print(f"⚖ decision #{did} 기록")
 
 
+def cmd_promote(a):
+    """메모(임시 상태) → wiki/*.md(영속 지식). 단방향: 승격하면 notes 에서 이동한다."""
+    con = db()
+    row = con.execute("SELECT * FROM notes WHERE id=?", (a.id,)).fetchone()
+    if not row:
+        con.close()
+        sys.exit(f"note #{a.id} 없음")
+    topic = a.topic or slugify(a.title or row["body"][:40], cfg()["slug_lang"])
+    WIKI.mkdir(parents=True, exist_ok=True)
+    path = WIKI / f"{topic}.md"
+    new = not path.exists()
+    tag = f" `#{row['tag']}`" if row["tag"] else ""
+    with path.open("a", encoding="utf-8") as f:
+        if new:
+            f.write(f"# {a.title or topic}\n\n")
+        f.write(f"- {row['body']}{tag} — _메모 #{row['id']}, {row['created_at'][:10]}_\n")
+    con.execute("DELETE FROM notes WHERE id=?", (a.id,))
+    con.commit()
+    con.close()
+    print(f"📖 note #{a.id} → {path.relative_to(ROOT)}  ({'새 지식 문서' if new else '기존 문서에 추가'})")
+    print("   메모가 wiki 지식으로 승격되어 notes 에서 이동했습니다.")
+
+
+def _trunc(s: str, n: int = 78) -> str:
+    s = " ".join(s.split())
+    return s if len(s) <= n else s[: n - 1] + "…"
+
+
+def cmd_search(a):
+    """DB(업무·메모·결정·산출물) + 파일(wiki·산출물 본문) 통합 검색. 색인 없이 즉석 grep."""
+    term = a.term
+    like = f"%{term}%"
+    lim = a.limit
+    con = db()
+    tasks = con.execute("SELECT * FROM tasks WHERE title LIKE ? ORDER BY id DESC LIMIT ?", (like, lim)).fetchall()
+    notes = con.execute("SELECT * FROM notes WHERE body LIKE ? ORDER BY id DESC LIMIT ?", (like, lim)).fetchall()
+    decs = con.execute(
+        "SELECT * FROM decisions WHERE summary LIKE ? OR rationale LIKE ? ORDER BY id DESC LIMIT ?",
+        (like, like, lim),
+    ).fetchall()
+    delivs = con.execute("SELECT * FROM deliverables WHERE title LIKE ? ORDER BY id DESC LIMIT ?", (like, lim)).fetchall()
+    con.close()
+
+    def scan(base: Path):
+        hits = []
+        if not base.exists():
+            return hits
+        for p in sorted(base.rglob("*.md")):
+            try:
+                for i, line in enumerate(p.read_text(encoding="utf-8").splitlines(), 1):
+                    if term.lower() in line.lower():
+                        hits.append((p, i, line.strip()))
+                        if len(hits) >= lim:
+                            return hits
+            except Exception:
+                continue
+        return hits
+
+    wiki_hits = scan(WIKI)
+    deliv_hits = scan(DELIV)
+
+    total = len(tasks) + len(notes) + len(decs) + len(delivs) + len(wiki_hits) + len(deliv_hits)
+    mark = {"todo": "○", "doing": "◐", "done": "●", "dropped": "✕"}
+    print(f'🔎 "{term}" 검색 결과')
+    if not total:
+        print("  (검색 결과 없음)")
+        return
+    if tasks:
+        print("\n[업무]")
+        for r in tasks:
+            print(f"  {mark.get(r['status'],' ')} #{r['id']}  {_trunc(r['title'])}")
+    if notes:
+        print("\n[메모]")
+        for r in notes:
+            print(f"  📝 #{r['id']}  {_trunc(r['body'])}")
+    if decs:
+        print("\n[결정]")
+        for r in decs:
+            print(f"  ⚖ #{r['id']}  {_trunc(r['summary'])}")
+    if delivs:
+        print("\n[산출물]")
+        for r in delivs:
+            print(f"  📄 #{r['id']}  {_trunc(r['title'])}")
+    if wiki_hits:
+        print("\n[wiki]")
+        for p, i, line in wiki_hits:
+            print(f"  📖 {p.relative_to(ROOT)}:{i}  {_trunc(line)}")
+    if deliv_hits:
+        print("\n[산출물 본문]")
+        for p, i, line in deliv_hits:
+            print(f"  📄 {p.relative_to(ROOT)}:{i}  {_trunc(line)}")
+    print(f"\n총 {total}건")
+
+
 def cmd_build(_):
     render.build_dashboard(DB, DASH)
     print(f"↻ 대시보드 빌드 → {DASH.relative_to(ROOT)}")
@@ -286,6 +383,14 @@ def main():
     pde.add_argument("--why", dest="why"); pde.add_argument("--task", type=int)
     pde.add_argument("--limit", type=int, default=10)
     pde.set_defaults(fn=cmd_decide)
+
+    pp = sub.add_parser("promote"); pp.add_argument("id", type=int)
+    pp.add_argument("--topic"); pp.add_argument("--title")
+    pp.set_defaults(fn=cmd_promote)
+
+    pse = sub.add_parser("search"); pse.add_argument("term")
+    pse.add_argument("--limit", type=int, default=10)
+    pse.set_defaults(fn=cmd_search)
 
     pv = sub.add_parser("deliver"); pv.add_argument("title")
     pv.add_argument("--task", type=int); pv.add_argument("--from", dest="from_"); pv.add_argument("--slug")

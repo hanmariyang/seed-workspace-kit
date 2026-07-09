@@ -30,6 +30,8 @@
 - **테마 커스텀** — `seed.json` 의 `theme` 로 대시보드·문서 색을 바꿉니다.
   - `accent`: `green`(기본)·`blue`·`violet`·`teal`·`amber`·`rose` · `mode`: `light`(기본)·`dark`
   - 대시보드 우상단 🌙 버튼으로 라이트/다크 즉시 전환(브라우저에 기억). 다른 골격이 필요하면 `docs/dashboard-catalog/` 10종 참고.
+- **지식은 씨실로 엮습니다** — wiki·산출물 본문에서 관련 주제를 `[[주제]]` 로 이으면 `/links` 로 연결이 되짚어집니다. 지식을 낱장이 아니라 그물로.
+- **재문진 heartbeat** — 새 세션에서 워크스페이스 작업을 시작할 때 `python bin/ws.py checkup --due` 로 재문진 시점인지 확인하세요. 신호가 있으면 사용자에게 `/checkup` 을 **한 번** 권합니다(강요 X, 넘기면 그걸로 끝). 이 워크스페이스는 인터뷰로 태어나 재문진으로 자랍니다.
 
 ## 명명 규약 (seed.json 이 강제)
 
@@ -58,6 +60,8 @@ python bin/ws.py promote 3 --topic 주제        # 메모 #3 → wiki/주제.md 
 python bin/ws.py search "검색어"               # 업무·메모·결정·산출물·wiki 통합 검색
 python bin/ws.py links "주제"                  # 씨실 — [[주제]] 백링크·아웃링크 (지식 연결)
 python bin/ws.py growth                        # 성장 나이테 — 워크스페이스가 자란 이야기 한 줄
+python bin/ws.py checkup                       # 재문진 — 축적 데이터로 CLAUDE.md 갱신 제안
+python bin/ws.py checkup --due                 # 재문진 시점인지만 조용히 확인 (heartbeat)
 python bin/ws.py templates            # 산출물 유형 템플릿 목록 (report·meeting·plan·retro 등)
 python bin/ws.py deliver "보고서 제목" --task 3 --template report   # 유형 골격으로 시작
 python bin/ws.py deliver "보고서 제목" --task 3 --from draft.md
@@ -73,5 +77,6 @@ python bin/ws.py view                 # 대시보드 열기 (mac·linux·windows
 - `/decide` — 결정+이유 기록·조회 (미래의 내가 "왜 이렇게 했지"를 되찾음)
 - `/search` — 업무·메모·결정·산출물·wiki 통합 검색 (색인 없이 즉석 grep)
 - `/links` — 씨실: `[[주제]]` 로 이은 지식 연결 백링크·아웃링크 (지식을 그물로)
+- `/checkup` — 재문진: 축적 데이터로 CLAUDE.md 를 지금의 나에 다시 맞춤 (인터뷰의 반복)
 - `/deliver` — 산출물 생성 (md+html+DB) + 대시보드 재빌드
 - `/view` — 대시보드 열기

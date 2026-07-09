@@ -13,6 +13,7 @@
   search "검색어" [--limit N]                        업무·메모·결정·산출물·wiki 통합 검색
   links ["주제"]                                     씨실 — [[주제]] 백링크·아웃링크 (엮인 지식 관계)
   growth                                           성장 나이테 — 이 워크스페이스가 자란 이야기 한 줄
+  checkup [--due]                                  재문진 — 축적 데이터로 CLAUDE.md 갱신 제안 (--due: 시점만 확인)
   deliver "제목" [--task ID] [--from FILE] [--template NAME] [--slug S]   산출물 생성 (md+html+DB) + 대시보드 재빌드
   templates                                        산출물 유형 템플릿 목록
   build                                            대시보드만 재빌드
@@ -439,6 +440,63 @@ def cmd_growth(_):
     print(render.growth_line(DB))
 
 
+def _save_cfg(**updates):
+    c = json.loads(CONFIG.read_text(encoding="utf-8")) if CONFIG.exists() else dict(DEFAULT_CONFIG)
+    c.update(updates)
+    CONFIG.write_text(json.dumps(c, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def _checkup_status():
+    """재문진 시점인지 판단. 기준: 마지막 재문진(없으면 심은 뒤) 30일 경과 또는 산출물 15건 누적."""
+    c = cfg()
+    con = db()
+    dn = con.execute("SELECT COUNT(*) FROM deliverables").fetchone()[0]
+    con.close()
+    last = c.get("last_checkup")
+    if not last:  # 첫 재문진 — 산출물 8건부터 권함(초기엔 관대)
+        return (dn >= 8, dn, None, dn)
+    try:
+        days = (datetime.now() - datetime.strptime(last[:10], "%Y-%m-%d")).days
+    except Exception:
+        days = 0
+    grown = dn - c.get("last_checkup_deliv", 0)
+    return (days >= 30 or grown >= 15, dn, days, grown)
+
+
+def cmd_checkup(a):
+    due, dn, days, grown = _checkup_status()
+    if a.due:  # heartbeat 확인용 — due 아니면 조용히 아무것도 안 함
+        if due and days is None:
+            print(f"🌱 재문진 시점 — 산출물 {dn}건 쌓였어요. `python bin/ws.py checkup` 으로 워크스페이스를 다시 맞춰보세요.")
+        elif due:
+            print(f"🌱 재문진 시점 — 마지막 재문진 {days}일 전(그 뒤 산출물 {grown}건). `python bin/ws.py checkup` 권장.")
+        return
+
+    con = db()
+    doms = Counter(r["domain"] for r in con.execute("SELECT domain FROM tasks").fetchall() if r["domain"])
+    tags = Counter(r["tag"] for r in con.execute("SELECT tag FROM notes").fetchall() if r["tag"])
+    dec_n = con.execute("SELECT COUNT(*) FROM decisions").fetchone()[0]
+    con.close()
+    topic_cnt = Counter(t for topics in _link_index().values() for t in topics)
+    know_n = len(list(WIKI.glob("*.md"))) if WIKI.exists() else 0
+
+    def top(counter, n=3):
+        return " · ".join(f"{k} {v}" for k, v in counter.most_common(n)) or "(없음)"
+
+    print("🌱 재문진 — 이 워크스페이스가 요즘 어떻게 자라는지\n")
+    print("관측")
+    print(f"  · 주요 도메인(업무): {top(doms)}")
+    print(f"  · 자주 붙인 태그(메모): {top(tags)}")
+    print(f"  · 가장 엮인 지식(씨실): {top(topic_cnt)}")
+    print(f"  · 산출물 {dn} · 지식 {know_n} · 결정 {dec_n}")
+    print("\n생각해볼 것  (CLAUDE.md 를 자동으로 바꾸지 않습니다 — 아래는 제안)")
+    print("  · '주요 도메인'·'주 산출물 형태'가 위 관측과 맞나요? 어긋나면 CLAUDE.md 를 손보세요.")
+    print("  · 한 번도 안 쓴 템플릿이 있으면 templates/ 에서 접어두는 것도 방법입니다.")
+    print("  · 자주 엮이는 주제는 wiki 지식 문서로 정리돼 있나요? (ws.py links 로 확인)")
+    _save_cfg(last_checkup=now()[:10], last_checkup_deliv=dn)
+    print("\n(마지막 재문진 기록을 오늘로 갱신했습니다. CLAUDE.md 편집은 당신 몫입니다.)")
+
+
 def cmd_build(_):
     render.build_dashboard(DB, DASH)
     print(f"↻ 대시보드 빌드 → {DASH.relative_to(ROOT)}")
@@ -511,6 +569,10 @@ def main():
 
     sub.add_parser("templates").set_defaults(fn=cmd_templates)
     sub.add_parser("growth").set_defaults(fn=cmd_growth)
+
+    pck = sub.add_parser("checkup"); pck.add_argument("--due", action="store_true")
+    pck.set_defaults(fn=cmd_checkup)
+
     sub.add_parser("build").set_defaults(fn=cmd_build)
     sub.add_parser("view").set_defaults(fn=cmd_view)
 

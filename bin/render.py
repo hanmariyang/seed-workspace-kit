@@ -328,6 +328,27 @@ def growth_line(db_path: Path) -> str:
     return f"🌱 이 워크스페이스는 {age_s} — {grew_s} 만큼 자랐습니다.{busy}"
 
 
+def _checkup_chip(db_path: Path, deliv_count: int) -> str:
+    """재문진 시점이면 대시보드에 조용한 칩 하나(수동 신호). 강제 X — 권유만."""
+    cfgp = db_path.parent / "seed.json"
+    if not cfgp.exists():
+        return ""
+    try:
+        c = json.loads(cfgp.read_text(encoding="utf-8"))
+    except Exception:
+        return ""
+    last = c.get("last_checkup")
+    if not last:
+        due = deliv_count >= 8
+    else:
+        try:
+            days = (datetime.now() - datetime.strptime(last[:10], "%Y-%m-%d")).days
+        except Exception:
+            days = 0
+        due = days >= 30 or (deliv_count - c.get("last_checkup_deliv", 0)) >= 15
+    return '<span class="stamp" style="opacity:1">🌱 재문진 권장 · <code>/checkup</code></span>' if due else ""
+
+
 def build_dashboard(db_path: Path, out_path: Path) -> None:
     con = sqlite3.connect(str(db_path))
     con.row_factory = sqlite3.Row
@@ -386,6 +407,7 @@ def build_dashboard(db_path: Path, out_path: Path) -> None:
   <span class="brand">🌱 {esc(_wsname())}</span>
   <h1>대시보드</h1>
   <button class="ttog" id="tt" title="라이트/다크 전환" aria-label="테마 전환">🌙</button>
+  {_checkup_chip(db_path, len(delivs))}
   <span class="stamp">최종 빌드 {stamp}</span>
 </header>
 <section class="stats">

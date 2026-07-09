@@ -8,6 +8,7 @@
 ### 추가됨
 - **`/note` · `/decide` 스킬** — 이미 있던 `notes`·`decisions` DB 테이블을 실제로 쓰는 CLI(`ws.py note` / `ws.py decide`). 인자 없이 부르면 최근 목록 조회. CLAUDE.md 가 약속한 `state=DB` 의 미이행분을 채움(원탁 5회차 — 약속 부채 청산, 동결 예외).
 - **지식 파이프라인 — `ws.py promote` + `/search` 스킬** — 메모를 `wiki/{topic}.md` 지식으로 승격(DB→md 단방향, 승격 시 notes 에서 이동)하고, 업무·메모·결정·산출물(DB) + wiki·산출물 본문(파일)을 색인 없이 즉석 grep 으로 통합 검색. CLAUDE.md 가 약속한 `knowledge=wiki` 실작동(원탁 5회차 a2+c1). 검색은 별도 도구화·색인 파일 없이 `ws.py` 단일 파일에 흡수.
+- **산출물 유형 템플릿 — `templates/*.md` (12종) + `ws.py templates` / `deliver --template`** — 보고서·회의록·기획·스펙·제안·의사결정(ADR)·리서치·가이드·체크리스트·주간·회고·사고회고 골격. `--template <이름>` 으로 시작하면 `{{title}}`·`{{date}}` 자동 치환. 템플릿은 코드가 아니라 마크다운 파일이라 `templates/<이름>.md` 하나 떨어뜨리면 코드 변경 없이 확장(원탁 5회차 a3).
 
 ## [0.1.0] — 2026-07-01
 

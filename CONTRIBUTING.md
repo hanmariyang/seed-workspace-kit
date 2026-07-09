@@ -49,6 +49,7 @@ open deliverables/_dashboard.html
 - 🐛 버그 수정 (렌더 깨짐, 명명 규약 엣지 케이스 등)
 - 🎨 대시보드 카탈로그(`docs/dashboard-catalog/`) 새 컨셉 — **외부 상용 서비스 이름/출처는 표기하지 않습니다**
 - 🌈 테마 액센트 추가 (`render.py` 의 `ACCENTS`)
+- 📑 산출물 템플릿(`templates/*.md`) — 새 유형 골격. **코드 변경 없이 md 한 장**이면 됩니다(첫 줄 `<!-- desc: … -->` + 본문에 `{{title}}`·`{{date}}`)
 - 📖 문서·번역 개선
 
 ## 범위 밖 — 받지 않는 것 (Non-Goals)

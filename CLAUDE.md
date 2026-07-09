@@ -56,6 +56,8 @@ python bin/ws.py note "빠른 메모" --tag 태그   # 메모 기록 (인자 없
 python bin/ws.py decide "정한 것" --why "이유"  # 결정+이유 기록 (인자 없으면 최근 목록)
 python bin/ws.py promote 3 --topic 주제        # 메모 #3 → wiki/주제.md 지식으로 승격
 python bin/ws.py search "검색어"               # 업무·메모·결정·산출물·wiki 통합 검색
+python bin/ws.py templates            # 산출물 유형 템플릿 목록 (report·meeting·plan·retro 등)
+python bin/ws.py deliver "보고서 제목" --task 3 --template report   # 유형 골격으로 시작
 python bin/ws.py deliver "보고서 제목" --task 3 --from draft.md
 python bin/ws.py build                # 대시보드만 재빌드
 python bin/ws.py view                 # 대시보드 열기 (mac·linux·windows 자동)

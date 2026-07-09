@@ -11,7 +11,8 @@
   decide ["결정"] [--why 이유] [--task ID]          결정 기록 · 인자 없으면 최근 목록
   promote <note_id> [--topic S] [--title T]        메모를 wiki/*.md 지식으로 승격 (DB→md 단방향)
   search "검색어" [--limit N]                        업무·메모·결정·산출물·wiki 통합 검색
-  deliver "제목" [--task ID] [--from FILE] [--slug S]   산출물 생성 (md+html+DB) + 대시보드 재빌드
+  deliver "제목" [--task ID] [--from FILE] [--template NAME] [--slug S]   산출물 생성 (md+html+DB) + 대시보드 재빌드
+  templates                                        산출물 유형 템플릿 목록
   build                                            대시보드만 재빌드
   view                                             대시보드를 기본 브라우저로 열기 (mac/linux/win 자동)
 
@@ -36,6 +37,7 @@ CONFIG = ROOT / "seed.json"
 DELIV = ROOT / "deliverables"
 DASH = DELIV / "_dashboard.html"
 WIKI = ROOT / "wiki"
+TEMPLATES = ROOT / "templates"
 
 DEFAULT_CONFIG = {
     "name": "My Workspace", "prefix": "WS", "id_pad": 3, "slug_lang": "ko",
@@ -92,7 +94,7 @@ def db() -> sqlite3.Connection:
 
 # ---------------------------------------------------------------- commands
 def cmd_init(_):
-    for d in (DELIV / "_assets", ROOT / "wiki", ROOT / "notes" / "inbox", ROOT / "archive"):
+    for d in (DELIV / "_assets", WIKI, TEMPLATES, ROOT / "notes" / "inbox", ROOT / "archive"):
         d.mkdir(parents=True, exist_ok=True)
     con = sqlite3.connect(str(DB))
     con.executescript(SCHEMA)
@@ -168,9 +170,16 @@ def cmd_deliver(a):
     md_path = folder / f"{slug}.md"
     html_path = folder / f"{slug}.html"
 
-    # 본문: --from 파일 / stdin / 스텁
+    # 본문 우선순위: --from 파일 > --template 골격 > stdin > 스텁
     if a.from_:
         content = Path(a.from_).read_text(encoding="utf-8")
+    elif a.template:
+        tp = TEMPLATES / f"{a.template}.md"
+        if not tp.exists():
+            avail = ", ".join(sorted(p.stem for p in TEMPLATES.glob("*.md") if p.stem != "README")) if TEMPLATES.exists() else ""
+            con.close()
+            sys.exit(f"템플릿 '{a.template}' 없음 — 사용 가능: {avail or '(없음)'}  (목록: python bin/ws.py templates)")
+        content = _fill_template(tp.read_text(encoding="utf-8"), a.title)
     elif not sys.stdin.isatty():
         content = sys.stdin.read()
     else:
@@ -331,6 +340,30 @@ def cmd_search(a):
     print(f"\n총 {total}건")
 
 
+def _fill_template(text: str, title: str) -> str:
+    """템플릿의 desc 주석 첫 줄을 걷어내고 {{title}}·{{date}} 치환."""
+    lines = text.splitlines()
+    if lines and lines[0].startswith("<!--") and "desc:" in lines[0]:
+        lines = lines[1:]
+        while lines and not lines[0].strip():
+            lines = lines[1:]
+    body = "\n".join(lines).replace("{{title}}", title).replace("{{date}}", now()[:10])
+    return body if body.endswith("\n") else body + "\n"
+
+
+def cmd_templates(_):
+    mds = sorted(p for p in TEMPLATES.glob("*.md") if p.stem != "README") if TEMPLATES.exists() else []
+    if not mds:
+        print("(템플릿 없음) — templates/<이름>.md 로 추가할 수 있습니다")
+        return
+    print('📑 산출물 템플릿 — `deliver "제목" --template <이름>`\n')
+    for p in mds:
+        first = p.read_text(encoding="utf-8").splitlines()[:1]
+        desc = first[0].split("desc:", 1)[1].replace("-->", "").strip() if first and "desc:" in first[0] else ""
+        print(f"  · {p.stem:<12} {desc}")
+    print("\n  새 템플릿은 templates/<이름>.md 로 추가 — {{title}}·{{date}} 가 치환됩니다.")
+
+
 def cmd_build(_):
     render.build_dashboard(DB, DASH)
     print(f"↻ 대시보드 빌드 → {DASH.relative_to(ROOT)}")
@@ -393,9 +426,11 @@ def main():
     pse.set_defaults(fn=cmd_search)
 
     pv = sub.add_parser("deliver"); pv.add_argument("title")
-    pv.add_argument("--task", type=int); pv.add_argument("--from", dest="from_"); pv.add_argument("--slug")
+    pv.add_argument("--task", type=int); pv.add_argument("--from", dest="from_")
+    pv.add_argument("--template", "-t"); pv.add_argument("--slug")
     pv.set_defaults(fn=cmd_deliver)
 
+    sub.add_parser("templates").set_defaults(fn=cmd_templates)
     sub.add_parser("build").set_defaults(fn=cmd_build)
     sub.add_parser("view").set_defaults(fn=cmd_view)
 

@@ -283,7 +283,11 @@ def build_dashboard(db_path: Path, out_path: Path) -> None:
     delivs = con.execute(
         "SELECT id,task_id,slug,title,html_path,created_at FROM deliverables ORDER BY id DESC"
     ).fetchall()
+    dec_n = con.execute("SELECT COUNT(*) FROM decisions").fetchone()[0]
     con.close()
+    # 지식(wiki) 수는 파일에서 파생 — 별도 저장 없음
+    wiki_dir = db_path.parent / "wiki"
+    know_n = len(list(wiki_dir.glob("*.md"))) if wiki_dir.exists() else 0
 
     doing_n = sum(1 for t in tasks if t["status"] == "doing")
     open_n = sum(1 for t in tasks if t["status"] in ("todo", "doing"))
@@ -335,6 +339,8 @@ def build_dashboard(db_path: Path, out_path: Path) -> None:
   <div class="stat s-doing"><div class="num">{doing_n}</div><div class="lab">진행 중</div></div>
   <div class="stat s-done"><div class="num">{done_n}<small>· {pct}%</small></div><div class="lab">완료</div></div>
   <div class="stat s-deliv"><div class="num">{len(delivs)}</div><div class="lab">산출물</div></div>
+  <div class="stat"><div class="num">{dec_n}</div><div class="lab">결정</div></div>
+  <div class="stat"><div class="num">{know_n}</div><div class="lab">지식</div></div>
 </section>
 <div class="toolbar">
   <input id="q" class="search" type="search" placeholder="제목·도메인·slug 검색…" autocomplete="off">

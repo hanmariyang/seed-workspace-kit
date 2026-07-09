@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌱 Seed 후기 — 1분이면 됩니다</title>
+<meta name="description" content="Seed를 써보셨다면 1분 후기를 남겨주세요. 어디서 막혔는지 한 줄이 다음 사람을 살립니다.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2327a456'/%3E%3Cpath d='M16 26 V15.5' stroke='%23fff' stroke-width='2.6' stroke-linecap='round'/%3E%3Cpath d='M15.5 17.5 C10 17.8 6.6 14.6 6.4 9.6 C12 9.3 15.3 12.5 15.5 17.5 Z' fill='%23d7f4e1'/%3E%3Cpath d='M16.5 15.5 C21.4 14 24 10.2 23.2 5.6 C18.4 7 15.7 10.9 16.5 15.5 Z' fill='%23fff'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#f7f9f7; --ink:#19211c; --muted:#69786d; --faint:#94a397;
+  --line:#e6ece6; --line-2:#eef2ee; --card:#fff;
+  --seed:#27a456; --seed-d:#1c8345; --seed-l:#e7f6ec; --soft:#f1f6f2; --sky:#2f7fc0;
+  --shadow:0 1px 2px rgba(20,40,25,.04), 0 10px 30px rgba(20,40,25,.06);
+  --r:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased}
+body{background:radial-gradient(1000px 500px at 12% -10%,rgba(39,164,86,.09),transparent 60%),var(--bg);
+  color:var(--ink);line-height:1.6;padding:44px 18px 64px;
+  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Segoe UI",sans-serif}
+.wrap{max-width:640px;margin:0 auto}
+.head{text-align:center;margin-bottom:28px}
+.head .m{font-size:44px;filter:drop-shadow(0 6px 16px rgba(39,164,86,.28))}
+.head h1{font-size:30px;font-weight:850;letter-spacing:-1px;margin:8px 0 0}
+.head p{font-size:15px;color:var(--muted);margin-top:10px}
+.head b{color:var(--seed-d)}
+form{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:26px 24px}
+.f{margin-bottom:20px}
+.f label{display:block;font-size:14.5px;font-weight:700;margin-bottom:7px}
+.f label .star{color:var(--seed);margin-left:2px}
+.f .hint{font-size:12.5px;color:var(--faint);font-weight:400;margin-left:4px}
+input[type=text],input[type=url],textarea,select{width:100%;border:1px solid var(--line);background:var(--soft);
+  border-radius:10px;padding:11px 13px;font-size:14.5px;color:var(--ink);font-family:inherit;transition:border-color .15s,box-shadow .15s}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--seed);background:var(--card);box-shadow:0 0 0 3px var(--seed-l)}
+textarea{min-height:78px;resize:vertical;line-height:1.6}
+.radios{display:flex;gap:8px;flex-wrap:wrap}
+.radios label{flex:1;min-width:130px;display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--soft);
+  border-radius:10px;padding:11px 13px;font-size:14px;font-weight:600;cursor:pointer;margin:0;transition:all .12s}
+.radios label:hover{border-color:var(--seed)}
+.radios input{accent-color:var(--seed)}
+.radios label:has(input:checked){border-color:var(--seed);background:var(--seed-l);color:var(--seed-d)}
+.rec{display:flex;align-items:center;gap:12px}
+.rec input[type=range]{flex:1;accent-color:var(--seed)}
+.rec .val{font-size:18px;font-weight:800;color:var(--seed-d);width:44px;text-align:center}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+.btn{flex:1;min-width:150px;font-weight:700;font-size:15px;padding:13px 16px;border-radius:12px;border:1px solid var(--line);
+  background:var(--card);color:var(--ink);cursor:pointer;transition:all .14s;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn:hover{border-color:var(--seed);color:var(--seed-d)}
+.btn.pri{background:var(--seed);border-color:var(--seed);color:#fff}
+.btn.pri:hover{background:var(--seed-d);color:#fff}
+.note{font-size:12.5px;color:var(--muted);text-align:center;margin-top:14px}
+.note a{color:var(--seed-d);font-weight:700}
+.foot{text-align:center;color:var(--faint);font-size:12px;margin-top:26px}
+.foot a{color:var(--seed-d)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);opacity:0;
+  background:var(--seed-d);color:#fff;font-size:14px;font-weight:600;padding:11px 20px;border-radius:999px;
+  box-shadow:0 8px 24px rgba(20,40,25,.25);transition:all .25s;pointer-events:none;z-index:50}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+</style></head>
+<body><div class="wrap">
+
+<div class="head">
+  <div class="m">🌱</div>
+  <h1>Seed 후기</h1>
+  <p><b>1분이면 됩니다.</b> 어디서 막혔는지 <b>한 줄</b>이 다음 사람을 살려요.<br>필수는 딱 하나(⭐) — 나머지는 편한 만큼만.</p>
+</div>
+
+<form id="fb" onsubmit="return false">
+  <div class="f">
+    <label>어떤 일 하세요? <span class="hint">직무·역할 (선택)</span></label>
+    <input type="text" id="role" placeholder="예: 교육 운영 매니저">
+  </div>
+
+  <div class="f">
+    <label>Seed를 어디에 쓰셨나요? <span class="hint">한 줄 (선택)</span></label>
+    <input type="text" id="use" placeholder="예: 주간 회의록·운영 보고서 정리">
+  </div>
+
+  <div class="f">
+    <label>설치는 어떻게 하셨어요?</label>
+    <div class="radios">
+      <label><input type="radio" name="install" value="🅐 새로 시작"> 🅐 새로 시작</label>
+      <label><input type="radio" name="install" value="🅑 기존 폴더에 얹기"> 🅑 기존 폴더에 얹기</label>
+      <label><input type="radio" name="install" value="아직 안 함"> 아직 안 함</label>
+    </div>
+  </div>
+
+  <div class="f">
+    <label>⭐ 가장 <b>막혔던</b> 지점은? <span class="star">*</span> <span class="hint">이 한 줄이 제일 중요해요</span></label>
+    <textarea id="stuck" placeholder="설정·명령·산출물 뜨는 거 등 — 어디서 멈칫했는지 편하게"></textarea>
+  </div>
+
+  <div class="f">
+    <label>😊 반대로 <b>"편하다/좋다"</b> 했던 지점은? <span class="hint">(선택)</span></label>
+    <textarea id="good" placeholder="예: 저장하니 대시보드가 바로 떠서 편했어요"></textarea>
+  </div>
+
+  <div class="f">
+    <label>🤔 불필요하거나 <b>헷갈렸던</b> 부분은? <span class="hint">(선택)</span></label>
+    <textarea id="bad" placeholder="안 쓰게 된 기능·헷갈린 안내 등"></textarea>
+  </div>
+
+  <div class="f">
+    <label>Seed로 만든 결과물이 있다면 링크 <span class="hint">(있으면 — 사례로 소개해요!)</span></label>
+    <input type="url" id="link" placeholder="https://...">
+  </div>
+
+  <div class="f">
+    <label>추천 의향 <span class="hint">동료에게 권할 확률 (선택)</span></label>
+    <div class="rec"><input type="range" id="nps" min="0" max="10" value="7" oninput="document.getElementById('npsv').textContent=this.value"><span class="val" id="npsv">7</span></div>
+  </div>
+
+  <div class="actions">
+    <button type="button" class="btn pri" onclick="postDiscussion()">💬 GitHub에 올리기</button>
+    <button type="button" class="btn" onclick="copyFeedback(this)">📋 복사하기</button>
+  </div>
+  <p class="note">💬 = 후기가 <a href="https://github.com/hanmariyang/seed-workspace-kit/discussions" target="_blank" rel="noopener">Discussions</a>에 자동 채워집니다 (GitHub 로그인 필요, 마지막에 "Start discussion" 클릭). · 📋 = 복사해서 어디든 붙여넣기.</p>
+</form>
+
+<p class="foot">🌱 <a href="../">Seed</a> — 인터뷰 한 번으로 자라는 워크스페이스. 후기 고마워요!</p>
+
+</div>
+<div class="toast" id="toast">복사됐어요 ✓</div>
+<script>
+var REPO = "https://github.com/hanmariyang/seed-workspace-kit";
+function val(id){ var e=document.getElementById(id); return e ? (e.value||'').trim() : ''; }
+function installVal(){ var r=document.querySelector('input[name=install]:checked'); return r?r.value:''; }
+function buildMd(){
+  var L=[];
+  L.push('## 🌱 Seed 후기');
+  L.push('');
+  if(val('role')) L.push('- **직무**: '+val('role'));
+  if(val('use'))  L.push('- **용도**: '+val('use'));
+  if(installVal()) L.push('- **설치**: '+installVal());
+  L.push('- **⭐ 가장 막혔던 지점**: '+(val('stuck')||'_(미기재)_'));
+  if(val('good')) L.push('- **😊 좋았던 점**: '+val('good'));
+  if(val('bad'))  L.push('- **🤔 불필요/헷갈림**: '+val('bad'));
+  if(val('link')) L.push('- **만든 것**: '+val('link'));
+  L.push('- **추천 의향**: '+val('nps')+'/10');
+  return L.join('\n');
+}
+function toast(msg){ var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('on'); setTimeout(function(){t.classList.remove('on');},1800); }
+function requireStuck(){ if(!val('stuck')){ document.getElementById('stuck').focus(); toast('막혔던 지점(⭐) 한 줄만 부탁해요'); return false; } return true; }
+function copyFeedback(btn){
+  if(!requireStuck()) return;
+  var md=buildMd();
+  var ok=function(){ toast('복사됐어요 ✓ — 어디든 붙여넣으세요'); };
+  if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(md).then(ok).catch(fb); } else { fb(); }
+  function fb(){ var ta=document.createElement('textarea'); ta.value=md; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');ok();}catch(e){} document.body.removeChild(ta); }
+}
+function postDiscussion(){
+  if(!requireStuck()) return;
+  var md=buildMd();
+  var url=REPO+'/discussions/new?category=general'
+    +'&title='+encodeURIComponent('Seed 후기')
+    +'&body='+encodeURIComponent(md);
+  window.open(url,'_blank','noopener');
+  toast('GitHub 창을 열었어요 — 마지막에 Start discussion 클릭!');
+}
+</script>
+</body></html>

@@ -234,6 +234,7 @@ Seed 는 **작게 유지되는 것**을 목표로 합니다. 기여를 환영해
 - 🔒 보안 제보: [`SECURITY.md`](SECURITY.md) — 취약점은 공개 이슈 대신 비공개 채널로
 - 🗒️ 변경 이력: [`CHANGELOG.md`](CHANGELOG.md)
 - 💬 질문·아이디어: [Discussions](https://github.com/hanmariyang/seed-workspace-kit/discussions)
+- 📝 써보셨다면 후기: [1분 후기 폼](https://hanmariyang.github.io/seed-workspace-kit/feedback/) — 어디서 막혔는지 한 줄이 다음 사람을 살립니다
 
 기여 전 큰 변경은 **이슈로 먼저 제안**해 방향을 맞춰주세요.
 

@@ -56,6 +56,7 @@ python bin/ws.py note "빠른 메모" --tag 태그   # 메모 기록 (인자 없
 python bin/ws.py decide "정한 것" --why "이유"  # 결정+이유 기록 (인자 없으면 최근 목록)
 python bin/ws.py promote 3 --topic 주제        # 메모 #3 → wiki/주제.md 지식으로 승격
 python bin/ws.py search "검색어"               # 업무·메모·결정·산출물·wiki 통합 검색
+python bin/ws.py links "주제"                  # 씨실 — [[주제]] 백링크·아웃링크 (지식 연결)
 python bin/ws.py growth                        # 성장 나이테 — 워크스페이스가 자란 이야기 한 줄
 python bin/ws.py templates            # 산출물 유형 템플릿 목록 (report·meeting·plan·retro 등)
 python bin/ws.py deliver "보고서 제목" --task 3 --template report   # 유형 골격으로 시작
@@ -71,5 +72,6 @@ python bin/ws.py view                 # 대시보드 열기 (mac·linux·windows
 - `/note` — 빠른 메모 기록·조회, 굳으면 `promote` 로 wiki 승격 (임시 상태 → 지식)
 - `/decide` — 결정+이유 기록·조회 (미래의 내가 "왜 이렇게 했지"를 되찾음)
 - `/search` — 업무·메모·결정·산출물·wiki 통합 검색 (색인 없이 즉석 grep)
+- `/links` — 씨실: `[[주제]]` 로 이은 지식 연결 백링크·아웃링크 (지식을 그물로)
 - `/deliver` — 산출물 생성 (md+html+DB) + 대시보드 재빌드
 - `/view` — 대시보드 열기

@@ -11,6 +11,7 @@
   decide ["결정"] [--why 이유] [--task ID]          결정 기록 · 인자 없으면 최근 목록
   promote <note_id> [--topic S] [--title T]        메모를 wiki/*.md 지식으로 승격 (DB→md 단방향)
   search "검색어" [--limit N]                        업무·메모·결정·산출물·wiki 통합 검색
+  links ["주제"]                                     씨실 — [[주제]] 백링크·아웃링크 (엮인 지식 관계)
   growth                                           성장 나이테 — 이 워크스페이스가 자란 이야기 한 줄
   deliver "제목" [--task ID] [--from FILE] [--template NAME] [--slug S]   산출물 생성 (md+html+DB) + 대시보드 재빌드
   templates                                        산출물 유형 템플릿 목록
@@ -26,6 +27,7 @@ import json
 import re
 import sqlite3
 import sys
+from collections import Counter
 from datetime import datetime
 from pathlib import Path
 
@@ -247,6 +249,65 @@ def cmd_decide(a):
     print(f"⚖ decision #{did} 기록")
 
 
+# ---------------------------------------------------------------- 씨실 (backlinks)
+# [[주제]] 는 파서가 아니라 '평문 관습' — 단순 grep 대상이다. 깨진 링크도 그냥 텍스트로 둔다.
+LINK_RE = re.compile(r"\[\[([^\[\]\n]+)\]\]")
+
+
+def _find_links(text: str) -> list:
+    return [m.strip() for m in LINK_RE.findall(text or "")]
+
+
+def _link_index() -> dict:
+    """모든 소스에서 [[주제]] 를 즉석 grep. 색인을 저장하지 않는다(원탁 6회차 절제선). {소스라벨: {주제,…}}."""
+    idx = {}
+    for base, tag in ((WIKI, "wiki"), (DELIV, "산출물")):
+        if base.exists():
+            for p in sorted(base.rglob("*.md")):
+                try:
+                    ls = set(_find_links(p.read_text(encoding="utf-8")))
+                except Exception:
+                    continue
+                if ls:
+                    idx[f"{tag}:{p.relative_to(ROOT)}"] = ls
+    con = db()
+    for r in con.execute("SELECT id,body FROM notes").fetchall():
+        ls = set(_find_links(r["body"]))
+        if ls:
+            idx[f"메모 #{r['id']}"] = ls
+    for r in con.execute("SELECT id,summary,rationale FROM decisions").fetchall():
+        ls = set(_find_links((r["summary"] or "") + " " + (r["rationale"] or "")))
+        if ls:
+            idx[f"결정 #{r['id']}"] = ls
+    con.close()
+    return idx
+
+
+def cmd_links(a):
+    idx = _link_index()
+    if not a.topic:  # 개요 — 주제별 백링크 수 (참조 많은 순)
+        cnt = Counter(t for topics in idx.values() for t in topics)
+        if not cnt:
+            print("(엮인 지식 없음) — wiki·산출물에 [[주제]] 로 이으면 여기 모입니다")
+            return
+        print("🕸 씨실 — 엮임 현황 (참조 많은 순)\n")
+        for t, n in cnt.most_common(a.limit):
+            has = (WIKI / f"{slugify(t, cfg()['slug_lang'])}.md").exists()
+            note = "" if has else "  (아직 지식 문서 없음)"
+            print(f"  [[{t}]]  ← {n}곳{note}")
+        return
+    topic = a.topic
+    wf = WIKI / f"{slugify(topic, cfg()['slug_lang'])}.md"
+    self_label = f"wiki:{wf.relative_to(ROOT)}"
+    back = [label for label, topics in idx.items() if topic in topics and label != self_label]
+    out = sorted(t for t in set(_find_links(wf.read_text(encoding="utf-8"))) if t != topic) if wf.exists() else []
+    print(f"🕸 [[{topic}]]" + (f"   ·   {wf.relative_to(ROOT)}" if wf.exists() else "   (지식 문서 없음)"))
+    print(f"\n[이 지식을 참조 (backlinks) · {len(back)}]")
+    print("\n".join(f"  ← {b}" for b in back) if back else "  (없음)")
+    print(f"\n[이 지식이 가리킴 (outlinks) · {len(out)}]")
+    print("\n".join(f"  → [[{o}]]" for o in out) if out else "  (없음)")
+
+
 def cmd_promote(a):
     """메모(임시 상태) → wiki/*.md(영속 지식). 단방향: 승격하면 notes 에서 이동한다."""
     con = db()
@@ -268,6 +329,11 @@ def cmd_promote(a):
     con.close()
     print(f"📖 note #{a.id} → {path.relative_to(ROOT)}  ({'새 지식 문서' if new else '기존 문서에 추가'})")
     print("   메모가 wiki 지식으로 승격되어 notes 에서 이동했습니다.")
+    linked = _find_links(row["body"])
+    if linked:
+        print("   🕸 씨실: " + ", ".join(f"[[{l}]]" for l in linked) + " 와(과) 엮였습니다.")
+    else:
+        print("   🕸 관련 지식이 있으면 이 문서에 [[주제]] 로 이어보세요 (ws.py links 로 관계 확인).")
 
 
 def _trunc(s: str, n: int = 78) -> str:
@@ -339,6 +405,10 @@ def cmd_search(a):
         for p, i, line in deliv_hits:
             print(f"  📄 {p.relative_to(ROOT)}:{i}  {_trunc(line)}")
     print(f"\n총 {total}건")
+    # 씨실 크로스레퍼런스 — 검색어가 엮인 주제면 백링크 수 귀띔
+    backn = sum(1 for topics in _link_index().values() if term in topics)
+    if backn:
+        print(f"🕸 [[{term}]] 은 {backn}곳에서 참조됩니다 — python bin/ws.py links {term}")
 
 
 def _fill_template(text: str, title: str) -> str:
@@ -429,6 +499,10 @@ def main():
     pse = sub.add_parser("search"); pse.add_argument("term")
     pse.add_argument("--limit", type=int, default=10)
     pse.set_defaults(fn=cmd_search)
+
+    pli = sub.add_parser("links"); pli.add_argument("topic", nargs="?")
+    pli.add_argument("--limit", type=int, default=20)
+    pli.set_defaults(fn=cmd_links)
 
     pv = sub.add_parser("deliver"); pv.add_argument("title")
     pv.add_argument("--task", type=int); pv.add_argument("--from", dest="from_")

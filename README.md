@@ -28,6 +28,38 @@
 
 ---
 
+## 🚀 시작하기 — Claude Code에 복사 → 붙여넣기
+
+설치 스크립트도, 명령어 외울 필요도 없습니다. **아래 프롬프트를 Claude Code에 그대로 붙여넣으면** 됩니다. 상황에 맞는 하나만 고르세요.
+
+### 🅐 새로 시작 (빈 폴더 / 새 워크스페이스)
+
+```text
+이 폴더에 Seed 워크스페이스 템플릿을 설치해줘: https://github.com/hanmariyang/seed-workspace-kit
+1) 저장소 파일을 지금 이 폴더로 받아줘 (git clone 후 .git 폴더 제거, 이 폴더는 비어 있어).
+2) README.md와 CLAUDE.md를 읽고 /onboard 스킬이 준비됐는지 확인해줘.
+3) 준비되면 알려줘 — 내가 /onboard 를 실행할게.
+```
+
+→ 설치가 끝나면 **`/onboard`** 를 실행하세요. 인터뷰가 당신 업무에 맞게 워크스페이스를 세웁니다.
+
+### 🅑 기존 폴더에 얹기 (이미 Claude Code로 작업 중인 폴더)
+
+```text
+지금 이 폴더에서 Claude Code로 일하고 있어. 여기에 Seed 워크스페이스 키트를 얹고 싶어: https://github.com/hanmariyang/seed-workspace-kit
+- 내 기존 파일은 절대 덮어쓰지 마 (특히 CLAUDE.md·README·.claude/).
+- Seed 핵심만 통합해줘: bin/ws.py, bin/render.py, seed.json, deliverables/(대시보드), 그리고 /task·/deliver·/view 스킬.
+- 이름·경로가 겹치면 덮어쓰지 말고 먼저 물어봐.
+- CLAUDE.md 엔 Seed 운영 규칙(상태=DB·지식=md, 산출물 md+html, /task·/deliver·/view)을 '추가'만 해줘. 통째로 교체하지 마.
+- 다 되면 seed.json(이름·PREFIX)만 내 맥락에 맞추고, 첫 산출물 하나를 시연해줘.
+```
+
+> 🅑는 **best-effort** 입니다 — Seed는 원래 🅐(새 워크스페이스가 자라는) 설계라, 기존 폴더 병합은 프롬프트가 *"덮어쓰지 마 / 겹치면 물어봐"* 를 강하게 지시합니다.
+
+*손으로 직접 하고 싶다면 아래 [빠른 시작](#빠른-시작)의 `gh`·CLI 방식도 있습니다.*
+
+---
+
 ## 결과물 미리보기
 
 저장하면 **소스(`.md`) + 렌더(`.html`)** 가 동시에 생기고, 그때마다 대시보드가 다시 그려집니다. 서버 없이 더블클릭으로 열립니다.

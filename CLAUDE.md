@@ -52,6 +52,8 @@ python bin/ws.py add "할 일" --domain 영역 --priority 1
 python bin/ws.py list --status todo
 python bin/ws.py start 3              # 진행중
 python bin/ws.py done 3               # 완료
+python bin/ws.py note "빠른 메모" --tag 태그   # 메모 기록 (인자 없으면 최근 목록)
+python bin/ws.py decide "정한 것" --why "이유"  # 결정+이유 기록 (인자 없으면 최근 목록)
 python bin/ws.py deliver "보고서 제목" --task 3 --from draft.md
 python bin/ws.py build                # 대시보드만 재빌드
 python bin/ws.py view                 # 대시보드 열기 (mac·linux·windows 자동)
@@ -61,5 +63,7 @@ python bin/ws.py view                 # 대시보드 열기 (mac·linux·windows
 
 - `/onboard` — (최초 1회) 인터뷰로 워크스페이스 맞춤 구축
 - `/task` — 업무 등록·조회·상태 변경
+- `/note` — 빠른 메모 기록·조회 (임시 상태 → 굳으면 wiki 승격)
+- `/decide` — 결정+이유 기록·조회 (미래의 내가 "왜 이렇게 했지"를 되찾음)
 - `/deliver` — 산출물 생성 (md+html+DB) + 대시보드 재빌드
 - `/view` — 대시보드 열기

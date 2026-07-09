@@ -5,6 +5,9 @@
 
 ## [Unreleased]
 
+### 추가됨
+- **`/note` · `/decide` 스킬** — 이미 있던 `notes`·`decisions` DB 테이블을 실제로 쓰는 CLI(`ws.py note` / `ws.py decide`). 인자 없이 부르면 최근 목록 조회. CLAUDE.md 가 약속한 `state=DB` 의 미이행분을 채움(원탁 5회차 — 약속 부채 청산, 동결 예외).
+
 ## [0.1.0] — 2026-07-01
 
 첫 공개 릴리스. 🌱

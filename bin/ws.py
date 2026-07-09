@@ -7,6 +7,8 @@
   list [--status todo|doing|done|dropped|all]      업무 목록
   done <id>                                        업무 완료
   start <id>                                       업무 진행중(doing)
+  note ["메모"] [--tag T]                           빠른 메모 기록 · 인자 없으면 최근 목록
+  decide ["결정"] [--why 이유] [--task ID]          결정 기록 · 인자 없으면 최근 목록
   deliver "제목" [--task ID] [--from FILE] [--slug S]   산출물 생성 (md+html+DB) + 대시보드 재빌드
   build                                            대시보드만 재빌드
   view                                             대시보드를 기본 브라우저로 열기 (mac/linux/win 자동)
@@ -186,6 +188,52 @@ def cmd_deliver(a):
     print(f"   ↻ 대시보드 재빌드 → {DASH.relative_to(ROOT)}")
 
 
+def cmd_note(a):
+    con = db()
+    if not a.text:  # 조회 모드 — 인자 없이 호출하면 최근 메모
+        rows = con.execute("SELECT * FROM notes ORDER BY id DESC LIMIT ?", (a.limit,)).fetchall()
+        con.close()
+        if not rows:
+            print('(메모 없음) — `python bin/ws.py note "메모 내용"` 로 기록')
+            return
+        for r in rows:
+            tag = f"  #{r['tag']}" if r["tag"] else ""
+            print(f"📝 #{r['id']}  {r['body']}{tag}  ({r['created_at'][:10]})")
+        return
+    cur = con.execute("INSERT INTO notes(body,tag,created_at) VALUES(?,?,?)", (a.text, a.tag, now()))
+    con.commit()
+    nid = cur.lastrowid
+    con.close()
+    print(f"📝 note #{nid} 기록")
+
+
+def cmd_decide(a):
+    con = db()
+    if not a.text:  # 조회 모드
+        rows = con.execute("SELECT * FROM decisions ORDER BY id DESC LIMIT ?", (a.limit,)).fetchall()
+        con.close()
+        if not rows:
+            print('(결정 없음) — `python bin/ws.py decide "결정" --why "이유"` 로 기록')
+            return
+        for r in rows:
+            tsk = f"  [task #{r['task_id']}]" if r["task_id"] else ""
+            print(f"⚖ #{r['id']}  {r['summary']}{tsk}  ({r['created_at'][:10]})")
+            if r["rationale"]:
+                print(f"     ↳ {r['rationale']}")
+        return
+    if a.task is not None and not con.execute("SELECT 1 FROM tasks WHERE id=?", (a.task,)).fetchone():
+        con.close()
+        sys.exit(f"task #{a.task} 없음")
+    cur = con.execute(
+        "INSERT INTO decisions(task_id,summary,rationale,created_at) VALUES(?,?,?,?)",
+        (a.task, a.text, a.why, now()),
+    )
+    con.commit()
+    did = cur.lastrowid
+    con.close()
+    print(f"⚖ decision #{did} 기록")
+
+
 def cmd_build(_):
     render.build_dashboard(DB, DASH)
     print(f"↻ 대시보드 빌드 → {DASH.relative_to(ROOT)}")
@@ -229,6 +277,15 @@ def main():
 
     pd = sub.add_parser("done"); pd.add_argument("id", type=int); pd.set_defaults(fn=cmd_done)
     ps = sub.add_parser("start"); ps.add_argument("id", type=int); ps.set_defaults(fn=cmd_start)
+
+    pn = sub.add_parser("note"); pn.add_argument("text", nargs="?")
+    pn.add_argument("--tag"); pn.add_argument("--limit", type=int, default=10)
+    pn.set_defaults(fn=cmd_note)
+
+    pde = sub.add_parser("decide"); pde.add_argument("text", nargs="?")
+    pde.add_argument("--why", dest="why"); pde.add_argument("--task", type=int)
+    pde.add_argument("--limit", type=int, default=10)
+    pde.set_defaults(fn=cmd_decide)
 
     pv = sub.add_parser("deliver"); pv.add_argument("title")
     pv.add_argument("--task", type=int); pv.add_argument("--from", dest="from_"); pv.add_argument("--slug")

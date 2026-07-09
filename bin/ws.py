@@ -11,6 +11,7 @@
   decide ["결정"] [--why 이유] [--task ID]          결정 기록 · 인자 없으면 최근 목록
   promote <note_id> [--topic S] [--title T]        메모를 wiki/*.md 지식으로 승격 (DB→md 단방향)
   search "검색어" [--limit N]                        업무·메모·결정·산출물·wiki 통합 검색
+  growth                                           성장 나이테 — 이 워크스페이스가 자란 이야기 한 줄
   deliver "제목" [--task ID] [--from FILE] [--template NAME] [--slug S]   산출물 생성 (md+html+DB) + 대시보드 재빌드
   templates                                        산출물 유형 템플릿 목록
   build                                            대시보드만 재빌드
@@ -364,6 +365,10 @@ def cmd_templates(_):
     print("\n  새 템플릿은 templates/<이름>.md 로 추가 — {{title}}·{{date}} 가 치환됩니다.")
 
 
+def cmd_growth(_):
+    print(render.growth_line(DB))
+
+
 def cmd_build(_):
     render.build_dashboard(DB, DASH)
     print(f"↻ 대시보드 빌드 → {DASH.relative_to(ROOT)}")
@@ -431,6 +436,7 @@ def main():
     pv.set_defaults(fn=cmd_deliver)
 
     sub.add_parser("templates").set_defaults(fn=cmd_templates)
+    sub.add_parser("growth").set_defaults(fn=cmd_growth)
     sub.add_parser("build").set_defaults(fn=cmd_build)
     sub.add_parser("view").set_defaults(fn=cmd_view)
 

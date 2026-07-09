@@ -12,7 +12,8 @@ import html
 import json
 import re
 import sqlite3
-from datetime import datetime
+from collections import Counter
+from datetime import datetime, date
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -274,6 +275,59 @@ def _wsname() -> str:
     return "Workspace"
 
 
+def _parse_ts(s: str):
+    for fmt, ln in (("%Y-%m-%dT%H:%M:%S", 19), ("%Y-%m-%d", 10)):
+        try:
+            return datetime.strptime(s[:ln], fmt)
+        except Exception:
+            continue
+    return None
+
+
+def growth_line(db_path: Path) -> str:
+    """성장 나이테 — created_at 타임스탬프를 읽어 워크스페이스가 자란 이야기 한 줄로.
+    차트·그래프 없이 문장만 (원탁 6회차 절제선). 새 데이터·표면 0, 읽기 전용."""
+    con = sqlite3.connect(str(db_path))
+
+    def stamps(table):
+        try:
+            return [r[0] for r in con.execute(f"SELECT created_at FROM {table}").fetchall() if r[0]]
+        except sqlite3.OperationalError:
+            return []
+
+    ts = stamps("tasks") + stamps("deliverables") + stamps("decisions") + stamps("notes")
+    d_n = con.execute("SELECT COUNT(*) FROM deliverables").fetchone()[0]
+    try:
+        dec_n = con.execute("SELECT COUNT(*) FROM decisions").fetchone()[0]
+    except sqlite3.OperationalError:
+        dec_n = 0
+    con.close()
+    wiki_dir = db_path.parent / "wiki"
+    k_n = len(list(wiki_dir.glob("*.md"))) if wiki_dir.exists() else 0
+
+    dts = [d for d in (_parse_ts(s) for s in ts) if d]
+    if not dts:
+        return "🌱 방금 심어진 워크스페이스입니다 — 첫 씨앗을 심어보세요."
+
+    age = (datetime.now() - min(dts)).days
+    grew = []
+    if d_n:
+        grew.append(f"산출물 {d_n}")
+    if k_n:
+        grew.append(f"지식 {k_n}")
+    if dec_n:
+        grew.append(f"결정 {dec_n}")
+    grew_s = "·".join(grew) if grew else "첫 자람을 기다리는 중"
+    age_s = "오늘 심었어요" if age == 0 else f"심은 지 {age}일째"
+
+    busy = ""
+    (by, bw), bc = Counter(d.isocalendar()[:2] for d in dts).most_common(1)[0]
+    if bc >= 3:
+        mon = date.fromisocalendar(by, bw, 1)
+        busy = f" 가장 바빴던 주는 {mon.month}월 {mon.day}일 주간이었어요."
+    return f"🌱 이 워크스페이스는 {age_s} — {grew_s} 만큼 자랐습니다.{busy}"
+
+
 def build_dashboard(db_path: Path, out_path: Path) -> None:
     con = sqlite3.connect(str(db_path))
     con.row_factory = sqlite3.Row
@@ -364,7 +418,7 @@ def build_dashboard(db_path: Path, out_path: Path) -> None:
     <th class="s" data-type="num">ID</th><th class="s">제목</th><th class="s">slug</th><th class="s">생성</th>
   </tr></thead><tbody>{drows}</tbody></table>
 </section>
-<footer class="dash-foot">🌱 Seed · 더블클릭으로 열리는 정적 대시보드 (서버 불필요)</footer>
+<footer class="dash-foot">{esc(growth_line(db_path))}<br><span style="opacity:.55">Seed · 더블클릭으로 열리는 정적 대시보드 (서버 불필요)</span></footer>
 </div>"""
 
     tc = _theme_cfg()
